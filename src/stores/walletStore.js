@@ -899,6 +899,7 @@ export default class WalletStore {
       await sleep(500);
 
       const op = Object.assign(BRC20_DEPLOY_PARAMS, {
+        tick: this.tickName,
         max: this.deployAmount.toString(),
         lim: this.deployLimit.toString(),
       });
@@ -980,6 +981,7 @@ export default class WalletStore {
       await sleep(500);
 
       const op = Object.assign(BRC20_MINT_PARAMS, {
+        tick: this.tickName,
         amt: this.mintAmount.toString(),
       });
       runInAction(() => {
@@ -1065,6 +1067,7 @@ export default class WalletStore {
       await sleep(500);
 
       const op = Object.assign(BRC20_TRANSFER_PARAMS, {
+        tick: this.tickName,
         amt: this.transferAmount.toString(),
       });
       runInAction(() => {

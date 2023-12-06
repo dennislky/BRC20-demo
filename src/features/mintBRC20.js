@@ -77,6 +77,7 @@ const MintBRC20Card = () => {
             sx={{ pr: 1 }}
             onChange={updateTickName}
             value={tickName}
+            helperText="4 alphanumeric characters"
           />
           <TextField
             label="Inscribe Address"
@@ -97,7 +98,8 @@ const MintBRC20Card = () => {
             disabled={
               !isInit ||
               chainsAvailable?.length === 0 ||
-              (!walletId && !appStoreWalletId)
+              (!walletId && !appStoreWalletId) ||
+              !tickName
             }
             testId="mint-brc20"
           />

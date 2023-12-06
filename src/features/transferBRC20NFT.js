@@ -95,7 +95,8 @@ const TransferBRC20NFTCard = () => {
             disabled={
               !isInit ||
               chainsAvailable?.length === 0 ||
-              (!walletId && !appStoreWalletId)
+              (!walletId && !appStoreWalletId) ||
+              (!toAddress && !transferAddress)
             }
             testId="transfer-brc20-nft"
           />
