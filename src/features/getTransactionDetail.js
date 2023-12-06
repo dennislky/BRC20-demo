@@ -8,6 +8,7 @@ import {
   Alert,
   AlertTitle,
   Divider,
+  TextField,
 } from "@mui/material";
 
 import { CardActionButton } from "../components/CardActionButton";
@@ -18,10 +19,12 @@ const GetTransactionDetailCard = () => {
   // local UI state
   const [errorMessage, setErrorMessage] = useState("");
   const [txDetail, setTxDetail] = useState();
+  const [orderId, setOrderId] = useState();
 
   // mobx store that link up with sdk wallets
-  const { walletStore } = useStore();
+  const { walletStore, appStore } = useStore();
   const { isInit, chainsAvailable, walletId } = walletStore;
+  const { walletId: appStoreWalletId } = appStore;
 
   // local UI state cleanup when sdk re-initialized
   useEffect(() => {
@@ -30,14 +33,14 @@ const GetTransactionDetailCard = () => {
   }, [isInit]);
 
   // feature logic
+  const setupOrderId = (event) => {
+    setOrderId(event.target.value);
+  };
   const getTransactionDetail = async () => {
     try {
       setErrorMessage("");
-      const data = await walletStore.getTransactionDetail(
-        "483625958281195612",
-        "0"
-      );
-      console.log(data);
+      const data = await walletStore.getTransactionDetail(orderId, "0");
+      console.log("getTransactionDetail data", data);
       if (data[0]) {
         setTxDetail(data[0]);
       }
@@ -60,10 +63,20 @@ const GetTransactionDetailCard = () => {
         </CardContent>
         <Divider flexItem />
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
+          <TextField
+            label="Order ID"
+            sx={{ pr: 1 }}
+            onChange={setupOrderId}
+            value={orderId}
+          />
           <CardActionButton
             buttonText="Get Transaction Detail"
             onClick={getTransactionDetail}
-            disabled={!isInit || chainsAvailable?.length === 0 || !walletId}
+            disabled={
+              !isInit ||
+              chainsAvailable?.length === 0 ||
+              (!walletId && !appStoreWalletId)
+            }
             testId="get-transaction-detail"
           />
         </CardActions>

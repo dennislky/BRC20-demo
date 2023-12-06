@@ -1,38 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 
-import {
-  BtcWallet,
-  TBtcWallet,
-  UsdtWallet,
-  LtcWallet,
-  BchWallet,
-  BsvWallet,
-  DogeWallet,
-} from "@okxweb3/coin-bitcoin";
-import { EthWallet } from "@okxweb3/coin-ethereum";
-import { AptosWallet } from "@okxweb3/coin-aptos";
-import {
-  AtomWallet,
-  OsmoWallet,
-  EvmosWallet,
-  AxelarWallet,
-  CronosWallet,
-  IrisWallet,
-  JunoWallet,
-  KavaWallet,
-  KujiraWallet,
-  SecretWallet,
-  StargazeWallet,
-  TerraWallet,
-  SeiWallet,
-} from "@okxweb3/coin-cosmos";
-import { EosWallet } from "@okxweb3/coin-eos";
-import { SolWallet } from "@okxweb3/coin-solana";
-import { StxWallet } from "@okxweb3/coin-stacks";
-import { StarknetWallet } from "@okxweb3/coin-starknet";
-import { SuiWallet } from "@okxweb3/coin-sui";
-import { TrxWallet } from "@okxweb3/coin-tron";
-import { ZkspaceWallet, ZksyncWallet } from "@okxweb3/coin-zkspace";
+import { BtcWallet } from "@okxweb3/coin-bitcoin";
 
 import {
   generateWalletId,
@@ -50,7 +18,16 @@ import {
   API_GET_TRANSACTION_DETAIL,
   API_GET_UTXO,
   API_GET_UTXO_NFT,
+  API_SEND_TRANSACTION,
   API_SEND_TRANSACTION_BATCH,
+  BRC20_DEPLOY_PARAMS,
+  BRC20_MINT_PARAMS,
+  BRC20_TRANSFER_PARAMS,
+  BRC20_TYPE_DEPLOY,
+  BRC20_TYPE_MINT,
+  BRC20_TYPE_TRANSFER,
+  FEE_RATE_MODE,
+  IS_SEND_TRANSACTION_BATCH_ENABLED,
   METHOD_GET,
   METHOD_POST,
   TICK_NAME,
@@ -58,6 +35,7 @@ import {
 
 export default class WalletStore {
   rootStore;
+
   coinTypeMapping = [];
   isInit = false;
 
@@ -69,20 +47,24 @@ export default class WalletStore {
       coinId: 1,
       chainId: 0,
     },
-    {
-      name: "Ethereum",
-      imageUrl: "https://static.coinall.ltd/cdn/wallet/logo/ETH-20220328.png",
-      shortName: "eth",
-      coinId: 3,
-      chainId: 1,
-    },
   ];
   coinsAvailable = [];
   selectedChain = undefined;
   selectedCoin = undefined;
 
   walletInfos = [];
-  walletId = undefined;
+  walletId = "";
+
+  inscribeAddress = "";
+  transferAddress = "";
+  deployAmount = 100;
+  deployLimit = 5;
+  mintAmount = 5;
+  transferAmount = 1;
+
+  deployTxHashList = [];
+  mintTxHashList = [];
+  transferTxHashList = [];
 
   constructor(rootStore) {
     makeAutoObservable(this, { rootStore: false });
@@ -98,439 +80,6 @@ export default class WalletStore {
       label: "BTC",
       wallet: this.btcWallet,
     });
-    this.bchWallet = new BchWallet();
-    this.coinTypeMapping.push({
-      network: "BTC",
-      token: "BCH",
-      label: "BCH",
-      wallet: this.bchWallet,
-    });
-    this.bsvWallet = new BsvWallet();
-    this.coinTypeMapping.push({
-      network: "BTC",
-      token: "BSV",
-      label: "BSV",
-      wallet: this.bsvWallet,
-    });
-    this.ltcWallet = new LtcWallet();
-    this.coinTypeMapping.push({
-      network: "BTC",
-      token: "LTC",
-      label: "LTC",
-      wallet: this.ltcWallet,
-    });
-    this.dogeWallet = new DogeWallet();
-    this.coinTypeMapping.push({
-      network: "BTC",
-      token: "DOGE",
-      label: "Doge",
-      wallet: this.dogeWallet,
-    });
-    this.tbtcWallet = new TBtcWallet();
-    this.coinTypeMapping.push({
-      network: "BTC",
-      token: "TBTC",
-      label: "TBTC",
-      wallet: this.tbtcWallet,
-    });
-    this.usdtWallet = new UsdtWallet();
-    this.coinTypeMapping.push({
-      network: "BTC",
-      token: "OMNI-USDT",
-      label: "Omni USDT",
-      wallet: this.usdtWallet,
-    });
-
-    // ETH network wallets, basically all methods provided per token are the same
-    this.ethWallet = new EthWallet();
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "ETH",
-      label: "ETH",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "A1",
-      label: "Arbitrum One",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "NOVA",
-      label: "Arbitrum Nova",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "AVAX",
-      label: "Avalance C",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "BOBA",
-      label: "Boba",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "BNB (ERC20)",
-      label: "BNB Chain",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "CORE",
-      label: "Core",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "CRO (ERC20)",
-      label: "Cronos (EVM)",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "CELO",
-      label: "Celo",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "CFX",
-      label: "Conflux (EVM)",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "ACE",
-      label: "Endurance",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "ETHW",
-      label: "Ethereum PoW",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "ETHF",
-      label: "Ethereum Fair",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "FIL (ERC20)",
-      label: "Filecoin (EVM)",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "FTM",
-      label: "Fantom",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "FLR",
-      label: "Flare",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "GNO",
-      label: "Gnosis",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "GETH",
-      label: "Goerli",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "HAQQ",
-      label: "HAQQ Network",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "KLAY",
-      label: "Klaytn",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "KCS",
-      label: "KCC",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "KAVA (ERC20)",
-      label: "Kava (EVM)",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "TBA",
-      label: "Linea",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "METIS",
-      label: "Metis",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "GLMR",
-      label: "Moonebeam",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "MOVR",
-      label: "Moonriver",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "MNT",
-      label: "Mantle",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "OMN",
-      label: "Omega Network",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "OKT",
-      label: "OKTC",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "OP",
-      label: "Optimism",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "OPBNB",
-      label: "opBNB",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "MATIC",
-      label: "Polygon",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "MATIC (zkEVM)",
-      label: "Polygon zkEVM",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "PULSE",
-      label: "Pulse Chain",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "SEPOLIA",
-      label: "Sepolia",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "ZKSYNC-ERA",
-      label: "zkSync Era",
-      wallet: this.ethWallet,
-    });
-    this.coinTypeMapping.push({
-      network: "ETH",
-      token: "ZETA",
-      label: "Zeta Chain",
-      wallet: this.ethWallet,
-    });
-
-    // COSMOS network wallets, need to reference what wallets @okxweb3/coin-cosmos provide, methods provided per different wallets are different too
-    this.atomWallet = new AtomWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "ATOM",
-      label: "Atom",
-      wallet: this.atomWallet,
-    });
-    this.axelarWallet = new AxelarWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "AXL",
-      label: "Axelar",
-      wallet: this.axelarWallet,
-    });
-    this.cronosWallet = new CronosWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "CRO",
-      label: "Cronos",
-      wallet: this.cronosWallet,
-    });
-    this.osmoWallet = new OsmoWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "OSMO",
-      label: "Osmosis",
-      wallet: this.osmoWallet,
-    });
-    this.evmosWallet = new EvmosWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "EVMOS",
-      label: "Evmos",
-      wallet: this.evmosWallet,
-    });
-    this.irisWallet = new IrisWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "IRIS",
-      label: "Iris",
-      wallet: this.irisWallet,
-    });
-    this.junoWallet = new JunoWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "JUNO",
-      label: "Juno",
-      wallet: this.junoWallet,
-    });
-    this.kavaWallet = new KavaWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "KAVA",
-      label: "Kava",
-      wallet: this.kavaWallet,
-    });
-    this.kujiraWallet = new KujiraWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "KUJI",
-      label: "Kujira",
-      wallet: this.kujiraWallet,
-    });
-    this.secretWallet = new SecretWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "SCRT",
-      label: "Secret",
-      wallet: this.secretWallet,
-    });
-    this.seiWallet = new SeiWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "SEI",
-      label: "Sei",
-      wallet: this.seiWallet,
-    });
-    this.stargazeWallet = new StargazeWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "STARS",
-      label: "Stargaze",
-      wallet: this.stargazeWallet,
-    });
-    this.terraWallet = new TerraWallet();
-    this.coinTypeMapping.push({
-      network: "COSMOS",
-      token: "LUNA",
-      label: "Terra",
-      wallet: this.terraWallet,
-    });
-
-    // wallets other than BTC, ETH & COSMOS networks
-    this.aptosWallet = new AptosWallet();
-    this.coinTypeMapping.push({
-      network: "APTOS",
-      token: "APTOS",
-      label: "Aptos",
-      wallet: this.aptosWallet,
-    });
-
-    this.eosWallet = new EosWallet();
-    this.coinTypeMapping.push({
-      network: "EOS",
-      token: "EOS",
-      label: "EOS",
-      wallet: this.eosWallet,
-    });
-
-    this.solWallet = new SolWallet();
-    this.coinTypeMapping.push({
-      network: "SOL",
-      token: "SOL",
-      label: "Solana",
-      wallet: this.solWallet,
-    });
-
-    this.stxWallet = new StxWallet();
-    this.coinTypeMapping.push({
-      network: "STX",
-      token: "STX",
-      label: "Stacks",
-      wallet: this.stxWallet,
-    });
-
-    this.starknetWallet = new StarknetWallet();
-    this.coinTypeMapping.push({
-      network: "STARK",
-      token: "STARK",
-      label: "Starknet",
-      wallet: this.starknetWallet,
-    });
-
-    this.suiWallet = new SuiWallet();
-    this.coinTypeMapping.push({
-      network: "SUI",
-      token: "SUI",
-      label: "SUI",
-      wallet: this.suiWallet,
-    });
-
-    this.trxWallet = new TrxWallet();
-    this.coinTypeMapping.push({
-      network: "TRX",
-      token: "TRON",
-      label: "TRX",
-      wallet: this.trxWallet,
-    });
-
-    this.zkSpaceWallet = new ZkspaceWallet();
-    this.coinTypeMapping.push({
-      network: "ZKSPACE",
-      token: "ZKSPACE",
-      label: "zkSpace",
-      wallet: this.zkSpaceWallet,
-    });
-
-    this.zkSyncWallet = new ZksyncWallet();
-    this.coinTypeMapping.push({
-      network: "ZKSYNC",
-      token: "ZKSYNC",
-      label: "zkSync",
-      wallet: this.zkSyncWallet,
-    });
 
     this.isInit = true;
   }
@@ -540,23 +89,39 @@ export default class WalletStore {
     return data.wallet;
   }
 
+  getHeaderParams = (date, method, path, body = undefined) => {
+    return headerParams(
+      date,
+      method,
+      path,
+      body,
+      this.rootStore.appStore.apiKey,
+      this.rootStore.appStore.apiProjectId,
+      this.rootStore.appStore.apiPassphrase,
+      this.rootStore.appStore.apiSecretKey
+    );
+  };
+
   fetchChainsAvailable = async () => {
     try {
       const date = new Date().toISOString();
       const url = getRequestUrl(API_GET_ALL_CHAINS);
       const response = await fetch(url, {
-        headers: headerParams(date, METHOD_GET, API_GET_ALL_CHAINS),
+        headers: this.getHeaderParams(date, METHOD_GET, API_GET_ALL_CHAINS),
       });
       const json = await response.json();
-      if (json && json.data) {
+      if (json && json.data && json.data.length) {
         const data = json.data;
         runInAction(() => {
           this.chainsAvailable = data;
           console.log("chainsAvailable", this.chainsAvailable);
         });
+      } else {
+        throw new Error("fetchChainsAvailable failed");
       }
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
@@ -576,18 +141,21 @@ export default class WalletStore {
         type: 0,
       });
       const response = await fetch(url, {
-        headers: headerParams(date, METHOD_GET, path),
+        headers: this.getHeaderParams(date, METHOD_GET, path),
       });
       const json = await response.json();
-      if (json && json.data) {
+      if (json && json.data && json.data.length) {
         const data = json.data;
         runInAction(() => {
           this.coinsAvailable = data;
           console.log("coinsAvailable", this.coinsAvailable);
         });
+      } else {
+        throw new Error("fetchCoinsAvailable failed");
       }
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
@@ -603,16 +171,16 @@ export default class WalletStore {
       const body = {
         walletId,
         addresses: this.walletInfos.map((walletInfo) => {
-          console.log(walletInfo);
           return {
             chainId: walletInfo.chainId || 0,
             address: walletInfo.address,
           };
         }),
       };
+      console.log("createWallet body", body);
       const response = await fetch(url, {
         method: METHOD_POST,
-        headers: headerParams(
+        headers: this.getHeaderParams(
           date,
           METHOD_POST,
           API_CREATE_WALLET,
@@ -621,21 +189,27 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data) {
+      if (json && json.data && json.data.length) {
         const data = json.data;
         runInAction(() => {
           this.walletId = data[0].walletId;
-          console.log("walletId", this.walletId);
+          this.inscribeAddress = this.walletInfos.find(
+            (walletInfo) => walletInfo.coinType === "BTC"
+          ).address;
+          this.transferAddress = this.rootStore.appStore.toAddress || "";
         });
+      } else {
+        throw new Error("createWallet failed");
       }
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
   getBalance = async () => {
     try {
-      const walletId = this.walletId;
+      const walletId = this.rootStore.appStore.walletId || this.walletId;
       const date = new Date().toISOString();
       const url = getRequestUrl(API_GET_ASSETS);
       const body = {
@@ -649,7 +223,7 @@ export default class WalletStore {
       };
       const response = await fetch(url, {
         method: METHOD_POST,
-        headers: headerParams(
+        headers: this.getHeaderParams(
           date,
           METHOD_POST,
           API_GET_ASSETS,
@@ -658,18 +232,24 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data) {
+      if (json && json.data && json.data.length) {
         const data = json.data;
         return data;
+      } else {
+        if (json) {
+          throw new Error(json.msg);
+        }
+        throw new Error("getBalance failed");
       }
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
   getTransactions = async () => {
     try {
-      const walletId = this.walletId;
+      const walletId = this.rootStore.appStore.walletId || this.walletId;
       const date = new Date().toISOString();
       const url = getRequestUrl(API_GET_TRANSACTIONS);
       const body = {
@@ -678,7 +258,7 @@ export default class WalletStore {
       };
       const response = await fetch(url, {
         method: METHOD_POST,
-        headers: headerParams(
+        headers: this.getHeaderParams(
           date,
           METHOD_POST,
           API_GET_TRANSACTIONS,
@@ -687,18 +267,24 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data) {
+      if (json && json.data && json.data.length) {
         const data = json.data;
         return data;
+      } else {
+        if (json) {
+          throw new Error(json.msg);
+        }
+        throw new Error("getTransactions failed");
       }
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
   getTransactionDetail = async (orderId, chainId) => {
     try {
-      const walletId = this.walletId;
+      const walletId = this.rootStore.appStore.walletId || this.walletId;
       const date = new Date().toISOString();
       const url = getRequestUrl(API_GET_TRANSACTION_DETAIL);
       const body = {
@@ -708,7 +294,7 @@ export default class WalletStore {
       };
       const response = await fetch(url, {
         method: METHOD_POST,
-        headers: headerParams(
+        headers: this.getHeaderParams(
           date,
           METHOD_POST,
           API_GET_TRANSACTION_DETAIL,
@@ -717,13 +303,43 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data) {
+      if (json && json.data && json.data.length) {
         const data = json.data;
         return data;
+      } else {
+        if (json) {
+          throw new Error(json.msg);
+        }
+        throw new Error("getTransactions failed");
       }
     } catch (err) {
       console.error(err);
+      throw err;
     }
+  };
+
+  setInscribeAddress = (address) => {
+    this.inscribeAddress = address;
+  };
+
+  setTransferAddress = (address) => {
+    this.transferAddress = address;
+  };
+
+  setDeployAmount = (amount) => {
+    this.deployAmount = amount;
+  };
+
+  setDeployLimit = (limit) => {
+    this.deployLimit = limit;
+  };
+
+  setMintAmount = (amount) => {
+    this.mintAmount = amount;
+  };
+
+  setTransferAmount = (amount) => {
+    this.transferAmount = amount;
   };
 
   getSignInfo = async (fromAddress, toAddress) => {
@@ -739,7 +355,7 @@ export default class WalletStore {
       };
       const response = await fetch(url, {
         method: METHOD_POST,
-        headers: headerParams(
+        headers: this.getHeaderParams(
           date,
           METHOD_POST,
           API_GET_SIGN_INFO,
@@ -748,13 +364,19 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data) {
+      if (json && json.data && json.data.length) {
         const data = json.data;
-        console.log(data);
+        console.log("getSignInfo data", data);
         return data;
+      } else {
+        if (json) {
+          throw new Error(json.msg);
+        }
+        throw new Error("getSignInfo failed");
       }
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
@@ -762,8 +384,9 @@ export default class WalletStore {
     fromAddress,
     inscriptionOutput,
     minOutput,
-    normalCost,
-    txAmount
+    cost,
+    txAmount,
+    utxoType = 11
   ) => {
     try {
       const date = new Date().toISOString();
@@ -777,14 +400,14 @@ export default class WalletStore {
               inscriptionOutput * txAmount > minOutput
                 ? inscriptionOutput * txAmount
                 : minOutput,
-            serviceCharge: normalCost * txAmount,
-            utxoType: 11,
+            serviceCharge: cost * txAmount,
+            utxoType,
           },
         ],
       };
       const response = await fetch(url, {
         method: METHOD_POST,
-        headers: headerParams(
+        headers: this.getHeaderParams(
           date,
           METHOD_POST,
           API_GET_UTXO,
@@ -793,13 +416,19 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data) {
+      if (json && json.data && json.data.length) {
         const data = json.data;
-        console.log(data);
+        console.log("getUTXO data", data);
         return data;
+      } else {
+        if (json) {
+          throw new Error(json.msg);
+        }
+        throw new Error("getUTXO failed");
       }
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
@@ -820,7 +449,7 @@ export default class WalletStore {
       };
       const response = await fetch(url, {
         method: METHOD_POST,
-        headers: headerParams(
+        headers: this.getHeaderParams(
           date,
           METHOD_POST,
           API_GET_UTXO_NFT,
@@ -829,97 +458,122 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data) {
+      if (json && json.data && json.data.length) {
         const data = json.data;
-        console.log(data);
+        console.log("getUTXONFT data", data);
         return data;
+      } else {
+        if (json) {
+          throw new Error(json.msg);
+        }
+        throw new Error("getUTXONFT failed");
       }
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
   constructBRC20Tx = async (
     fromAddress,
     utxoList,
-    normalFeeRate,
+    feeRate,
     inscriptionOutput,
     inscriptionBody
   ) => {
     try {
-      const privateKey = this.walletInfos.find(
-        (walletInfo) =>
-          walletInfo.coinType === "BTC" && walletInfo.address === fromAddress
-      ).privateKey;
+      const privateKey =
+        this.rootStore.appStore.privateKey ||
+        this.walletInfos.find((walletInfo) => walletInfo.coinType === "BTC")
+          .privateKey;
 
       const commitTxPrevOutputList = [];
       utxoList.forEach((utxo) => {
         commitTxPrevOutputList.push({
           txId: utxo.txHash,
-          vOut: utxo.vOut,
-          amount: utxo.coinAmount,
+          vOut: utxo.vout,
+          amount: utxo.coinAmount - parseInt(inscriptionOutput, 10),
           address: fromAddress,
           privateKey,
         });
       });
-
       const inscriptionDataList = [];
       inscriptionDataList.push({
         contentType: "text/plain;charset=utf-8",
         body: inscriptionBody,
         revealAddr: fromAddress,
       });
-
+      console.log("inscriptionDataList", inscriptionDataList);
       const wallet = this.getWallet("BTC");
       const data = {
         type: 1,
         commitTxPrevOutputList,
-        commitFeeRate: normalFeeRate,
-        revealFeeRate: normalFeeRate,
-        revealOutValue: inscriptionOutput,
+        commitFeeRate: feeRate,
+        revealFeeRate: feeRate,
+        revealOutValue: parseInt(inscriptionOutput, 10),
         inscriptionDataList,
         changeAddress: fromAddress,
       };
-      console.log(data);
+      console.log("constructBRC20Tx data", data);
       const txs = await wallet.signTransaction({ data });
-      console.log(txs);
+      console.log("constructBRC20Tx txs", txs);
       return txs;
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
-  constructBTCTx = async (fromAddress, utxoList) => {
+  constructBTCTx = async (
+    fromAddress,
+    toAddress,
+    utxoNFTList,
+    utxoList,
+    feeRate,
+    inscriptionOutput
+  ) => {
     try {
-      const wallet = this.getWallet("BTC");
-      const privateKey = this.walletInfos.find(
-        (walletInfo) =>
-          walletInfo.coinType === "BTC" && walletInfo.address === fromAddress
-      ).privateKey;
+      const privateKey =
+        this.rootStore.appStore.privateKey ||
+        this.walletInfos.find((walletInfo) => walletInfo.coinType === "BTC")
+          .privateKey;
 
-      const inputs = utxoList.map((utxo) => {
+      let inputs = utxoNFTList.map((utxo) => {
         return {
           txId: utxo.txHash,
-          vOut: utxo.vOut,
-          // amount: utxo.coinAmount,
+          vOut: utxo.vout,
+          amount: utxo.coinAmount,
         };
       });
+      inputs = inputs.concat(
+        utxoList.map((utxo) => {
+          return {
+            txId: utxo.txHash,
+            vOut: utxo.vout,
+            amount: utxo.coinAmount,
+          };
+        })
+      );
       const outputs = [
         {
-          address: fromAddress,
-          // amount: 0,
+          address: toAddress,
+          amount: parseInt(inscriptionOutput, 0),
         },
       ];
+      const data = {
+        type: 0,
+        inputs,
+        outputs,
+        address: fromAddress,
+        feePerB: feeRate,
+      };
+      console.log("signTransaction data", data);
+
+      const wallet = this.getWallet("BTC");
       const txs = await wallet.signTransaction({
         privateKey,
-        data: {
-          inputs,
-          outputs,
-          address: fromAddress,
-          feePerB: 2,
-        },
+        data,
       });
-      console.log(txs);
       return txs;
     } catch (err) {
       console.error(err);
@@ -931,13 +585,14 @@ export default class WalletStore {
     toAddress,
     txs,
     txType,
-    normalFeeRate
+    feeRate
   ) => {
     try {
-      const wallet = this.getWallet("BTC");
-      const walletId = this.walletId;
+      const walletId = this.rootStore.appStore.walletId || this.walletId;
       const date = new Date().toISOString();
       const url = getRequestUrl(API_SEND_TRANSACTION_BATCH);
+
+      const wallet = this.getWallet("BTC");
       const body = {
         txList: [
           {
@@ -945,66 +600,76 @@ export default class WalletStore {
             walletId,
             addrFrom: fromAddress,
             addrTo: toAddress,
-            txHash: wallet.calcTxHash({
+            txHash: await wallet.calcTxHash({
               data: txs.commitTx,
             }),
             txAmount: 0,
             chainId: 0,
             txType,
             serviceCharge: txs.commitTxFee,
-            tokenAddress: `${fromAddress}-brc20-okex`,
+            tokenAddress:
+              txType === BRC20_TYPE_DEPLOY ? "" : `btc-brc20-${TICK_NAME}`,
             extJson: {
               broadcastType: 1,
               dependTx: [],
-              feeRate: normalFeeRate,
+              feeRate,
               itemId: "commitTx",
             },
           },
-          ...txs.revealTxList.map((revealTx, index) => {
-            return {
-              signedTx: revealTx,
-              walletId,
-              addrFrom: fromAddress,
-              addrTo: toAddress,
-              txHash: wallet.calcTxHash({
-                data: revealTx,
-              }),
-              txAmount: 0,
-              chainId: 0,
-              txType,
-              serviceCharge: txs.revealTxFees[index],
-              tokenAddress: `${fromAddress}-brc20-okex`,
-              extJson: {
-                broadcastType: 1,
-                dependTx: [
-                  wallet.calcTxHash({
-                    data: txs.commitTx,
-                  }),
-                ],
-                feeRate: normalFeeRate,
-                itemId: `revealTx${index}`,
-              },
-            };
-          }),
+          ...(await Promise.all(
+            txs.revealTxs.map(async (revealTx, index) => {
+              return {
+                signedTx: revealTx,
+                walletId,
+                addrFrom: toAddress,
+                addrTo: fromAddress,
+                txHash: await wallet.calcTxHash({
+                  data: revealTx,
+                }),
+                txAmount: 0,
+                chainId: 0,
+                txType,
+                serviceCharge: txs.revealTxFees[index],
+                tokenAddress:
+                  txType === BRC20_TYPE_DEPLOY ? "" : `btc-brc20-${TICK_NAME}`,
+                extJson: {
+                  broadcastType: 1,
+                  dependTx: [
+                    await wallet.calcTxHash({
+                      data: txs.commitTx,
+                    }),
+                  ],
+                  feeRate,
+                  itemId: `revealTx${index}`,
+                },
+              };
+            })
+          )),
         ],
       };
-      const response = await fetch(url, {
-        method: METHOD_POST,
-        headers: headerParams(
-          date,
-          METHOD_POST,
-          API_SEND_TRANSACTION_BATCH,
-          JSON.stringify(body)
-        ),
-        body: JSON.stringify(body),
-      });
-      const json = await response.json();
-      if (json && json.data) {
-        const data = json.data;
-        return data;
+      console.log("sendTransactionBatch body", body);
+      if (IS_SEND_TRANSACTION_BATCH_ENABLED) {
+        const response = await fetch(url, {
+          method: METHOD_POST,
+          headers: this.getHeaderParams(
+            date,
+            METHOD_POST,
+            API_SEND_TRANSACTION_BATCH,
+            JSON.stringify(body)
+          ),
+          body: JSON.stringify(body),
+        });
+        const json = await response.json();
+        if (json && json.data && json.data.length) {
+          const data = json.data;
+          return data;
+        } else {
+          throw new Error("sendTransactionBatch failed");
+        }
       }
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
@@ -1013,166 +678,237 @@ export default class WalletStore {
     toAddress,
     tx,
     txType,
-    normalFeeRate,
-    normalCost
+    feeRate,
+    utxoNFTList
   ) => {
     try {
-      const wallet = this.getWallet("BTC");
-      const walletId = this.walletId;
+      const walletId = this.rootStore.appStore.walletId || this.walletId;
       const date = new Date().toISOString();
-      const url = getRequestUrl(API_SEND_TRANSACTION_BATCH);
+      const url = getRequestUrl(API_SEND_TRANSACTION);
+
+      const wallet = this.getWallet("BTC");
       const body = {
-        txList: [
-          {
-            signedTx: tx,
-            walletId,
-            addrFrom: fromAddress,
-            addrTo: toAddress,
-            txHash: wallet.calcTxHash({
-              data: tx,
-            }),
-            txAmount: 0,
-            chainId: 0,
-            txType,
-            serviceCharge: normalCost,
-            tokenAddress: `${fromAddress}-brc20-okex`,
-            extJson: {
-              broadcastType: 1,
-              dependTx: [],
-              feeRate: normalFeeRate,
-              itemId: "transferTx",
-            },
-          },
-        ],
+        signedTx: tx,
+        walletId,
+        addrFrom: fromAddress,
+        addrTo: toAddress,
+        txHash: await wallet.calcTxHash({
+          data: tx,
+        }),
+        txAmount: utxoNFTList[0].tokenAmount,
+        chainId: 0,
+        txType,
+        serviceCharge: 0,
+        tokenAddress: `btc-brc20-${TICK_NAME}`,
+        extJson: {
+          feeRate,
+        },
       };
+      console.log("sendTransaction", JSON.stringify(body));
       const response = await fetch(url, {
         method: METHOD_POST,
-        headers: headerParams(
+        headers: this.getHeaderParams(
           date,
           METHOD_POST,
-          API_SEND_TRANSACTION_BATCH,
+          API_SEND_TRANSACTION,
           JSON.stringify(body)
         ),
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data) {
+      if (json && json.data && json.data.length) {
         const data = json.data;
         return data;
+      } else {
+        if (json) {
+          throw new Error(json.msg);
+        }
+        throw new Error("sendTransaction failed");
       }
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
-  deployBRC20 = async (fromAddress) => {
+  deployBRC20 = async () => {
     try {
+      const fromAddress =
+        this.rootStore.appStore.fromAddress || this.inscribeAddress;
       const signInfo = await this.getSignInfo(fromAddress, fromAddress);
       // txAmount for deploy BRC20 is 1 commit tx + 1 reveal tx
       const utxo = await this.getUTXO(
         fromAddress,
         signInfo[0].inscriptionOutput,
         signInfo[0].minOutput,
-        signInfo[0].normalCost,
+        FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
         1 + 1
       );
+      const op = Object.assign(BRC20_DEPLOY_PARAMS, {
+        max: this.deployAmount.toString(),
+        lim: this.deployLimit.toString(),
+      });
+      console.log("deployBRC20 op", op);
       const inscribedTxs = await this.constructBRC20Tx(
         fromAddress,
         utxo[0].utxoList,
-        signInfo[0].normalFeeRate,
+        FEE_RATE_MODE ? signInfo[0].normalFeeRate : signInfo[0].maxFeeRate,
         signInfo[0].inscriptionOutput,
-        `{"p":"brc-20","op":"deploy","tick":${TICK_NAME},"max":"21000000","lim":"1000"}`
+        JSON.stringify(op)
       );
+      console.log("commitAddr", inscribedTxs.commitAddrs);
       const result = await this.sendTransactionBatch(
         fromAddress,
-        fromAddress,
+        inscribedTxs.commitAddrs[0],
         inscribedTxs,
-        "BRC20_DEPLOY",
-        signInfo[0].normalFeeRate
+        BRC20_TYPE_DEPLOY,
+        FEE_RATE_MODE ? signInfo[0].normalFeeRate : signInfo[0].maxFeeRate
       );
-      console.log(result);
+      console.log("deployBRC20 result", result);
+      if (result && result[0].txHashList) {
+        this.deployTxHashList.push({ txHashList: result[0].txHashList, op });
+      } else {
+        throw new Error("deployBRC20 failed");
+      }
       return result;
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
-  mintBRC20 = async (fromAddress) => {
+  mintBRC20 = async () => {
     try {
+      const fromAddress =
+        this.rootStore.appStore.fromAddress || this.inscribeAddress;
       const signInfo = await this.getSignInfo(fromAddress, fromAddress);
-      // txAmount for deploy BRC20 is 1 commit tx + 1 reveal tx
       const utxo = await this.getUTXO(
         fromAddress,
         signInfo[0].inscriptionOutput,
         signInfo[0].minOutput,
-        signInfo[0].normalCost,
+        FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
         1 + 1
       );
+      const op = Object.assign(BRC20_MINT_PARAMS, {
+        amt: this.mintAmount.toString(),
+      });
+      console.log("mintBRC20 op", op);
       const inscribedTxs = await this.constructBRC20Tx(
         fromAddress,
         utxo[0].utxoList,
-        signInfo[0].normalFeeRate,
+        FEE_RATE_MODE ? signInfo[0].normalFeeRate : signInfo[0].maxFeeRate,
         signInfo[0].inscriptionOutput,
-        `{"p":"brc-20","op":"mint","tick":${TICK_NAME},"amt":"100"}`
+        JSON.stringify(op)
       );
       const result = await this.sendTransactionBatch(
         fromAddress,
-        fromAddress,
+        inscribedTxs.commitAddrs[0],
         inscribedTxs,
-        "BRC20_MINT",
-        signInfo[0].normalFeeRate
+        BRC20_TYPE_MINT,
+        FEE_RATE_MODE ? signInfo[0].normalFeeRate : signInfo[0].maxFeeRate
       );
-      console.log(result);
+      console.log("mintBRC20 result", result);
+      if (result && result[0].txHashList) {
+        this.mintTxHashList.push({ txHashList: result[0].txHashList, op });
+      } else {
+        throw new Error("mintBRC20 failed");
+      }
       return result;
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
-  transferBRC20 = async (fromAddress, toAddress) => {
+  transferBRC20 = async () => {
     try {
+      const fromAddress =
+        this.rootStore.appStore.fromAddress || this.inscribeAddress;
       const signInfo = await this.getSignInfo(fromAddress, fromAddress);
-      // txAmount for deploy BRC20 is 1 commit tx + 1 reveal tx
-      const utxo = await this.getUTXO(
+      let utxo = await this.getUTXO(
         fromAddress,
         signInfo[0].inscriptionOutput,
         signInfo[0].minOutput,
-        signInfo[0].normalCost,
+        FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
         1 + 1
       );
+      const op = Object.assign(BRC20_TRANSFER_PARAMS, {
+        amt: this.transferAmount.toString(),
+      });
+      console.log("transferBRC20 op", op);
       const inscribedTxs = await this.constructBRC20Tx(
         fromAddress,
         utxo[0].utxoList,
-        signInfo[0].normalFeeRate,
+        FEE_RATE_MODE ? signInfo[0].normalFeeRate : signInfo[0].maxFeeRate,
         signInfo[0].inscriptionOutput,
-        `{"p":"brc-20","op":"transfer","tick":${TICK_NAME},"amt":"100"}`
+        JSON.stringify(op)
       );
       const result = await this.sendTransactionBatch(
         fromAddress,
-        fromAddress,
+        inscribedTxs.commitAddrs[0],
         inscribedTxs,
-        "BRC20_INSCRIBE",
-        signInfo[0].normalFeeRate
+        BRC20_TYPE_TRANSFER,
+        FEE_RATE_MODE ? signInfo[0].normalFeeRate : signInfo[0].maxFeeRate
       );
-      console.log(result);
+      console.log("transferBRC20 inscribe result", result);
+      if (result && result[0].txHashList) {
+        this.transferTxHashList.push({ txHashList: result[0].txHashList, op });
+      } else {
+        throw new Error("transferBRC20 failed");
+      }
+      return result;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
 
+  transferBRC20NFT = async () => {
+    try {
+      const fromAddress =
+        this.rootStore.appStore.fromAddress || this.inscribeAddress;
+      const toAddress =
+        this.rootStore.appStore.toAddress || this.transferAddress;
       const transferSignInfo = await this.getSignInfo(fromAddress, toAddress);
       const utxoNFT = await this.getUTXONFT(fromAddress);
-      const tx = await this.constructBTCTx(fromAddress, utxoNFT[0].utxoList);
-      const wallet = this.getWallet("BTC");
-      const signedTx = await wallet.signTransaction(tx);
+      const utxo = await this.getUTXO(
+        fromAddress,
+        transferSignInfo[0].inscriptionOutput,
+        transferSignInfo[0].minOutput,
+        FEE_RATE_MODE
+          ? transferSignInfo[0].normalCost
+          : transferSignInfo[0].maxCost,
+        1 + 1,
+        1
+      );
+      const tx = await this.constructBTCTx(
+        fromAddress,
+        toAddress,
+        utxoNFT[0].utxoList,
+        utxo[0].utxoList,
+        FEE_RATE_MODE
+          ? transferSignInfo[0].normalFeeRate
+          : transferSignInfo[0].maxFeeRate,
+        transferSignInfo[0].inscriptionOutput
+      );
       const transferResult = await this.sendTransaction(
         fromAddress,
         toAddress,
-        signedTx,
+        tx,
         "TRANSFER",
-        transferSignInfo[0].normalFeeRate,
-        transferSignInfo[0].normalCost
+        FEE_RATE_MODE
+          ? transferSignInfo[0].normalFeeRate
+          : transferSignInfo[0].maxFeeRate,
+        FEE_RATE_MODE
+          ? transferSignInfo[0].normalCost
+          : transferSignInfo[0].maxCost,
+        utxoNFT[0].utxoList
       );
-      console.log(transferResult);
+      console.log("transferBRC20 transfer result", transferResult);
       return transferResult;
     } catch (err) {
       console.error(err);
+      throw err;
     }
   };
 
@@ -1187,5 +923,16 @@ export default class WalletStore {
 
     this.walletInfos = [];
     this.walletId = undefined;
+
+    this.inscribeAddress = "";
+    this.transferAddress = "";
+    this.deployAmount = 100;
+    this.deployLimit = 5;
+    this.mintAmount = 5;
+    this.transferAmount = 1;
+
+    this.deployTxHashList = [];
+    this.mintTxHashList = [];
+    this.transferTxHashList = [];
   }
 }

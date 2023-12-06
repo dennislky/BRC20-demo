@@ -23,20 +23,31 @@ export const API_SEND_TRANSACTION = "/api/v5/waas/transaction/send-transaction";
 export const API_SEND_TRANSACTION_BATCH =
   "/api/v5/waas/transaction/send-transaction-batch";
 
+export const TICK_NAME = "okex";
 export const BRC20_DEPLOY_PARAMS = {
   p: "brc-20",
   op: "deploy",
-  tick: "ordi",
+  tick: TICK_NAME,
 };
 export const BRC20_MINT_PARAMS = {
   p: "brc-20",
   op: "mint",
-  tick: "ordi",
+  tick: TICK_NAME,
 };
 export const BRC20_TRANSFER_PARAMS = {
   p: "brc-20",
   op: "transfer",
-  tick: "ordi",
+  tick: TICK_NAME,
 };
 
-export const TICK_NAME = "okex";
+export const BRC20_TYPE_DEPLOY = "BRC20_DEPLOY";
+export const BRC20_TYPE_MINT = "BRC20_MINT";
+export const BRC20_TYPE_TRANSFER = "BRC20_TRANSFER";
+
+export const TEMP_FROM_ADDRESS = process.env.REACT_APP_TEMP_FROM_ADDRESS;
+export const TEMP_TO_ADDRESS = process.env.REACT_APP_TEMP_TO_ADDRESS;
+export const TEMP_WALLET_ID =  process.env.REACT_APP_TEMP_WALLET_ID;
+export const TEMP_PRIVATE_KEY = process.env.REACT_APP_TEMP_PRIVATE_KEY;
+
+export const FEE_RATE_MODE = 0; // 0: max, 1: normal
+export const IS_SEND_TRANSACTION_BATCH_ENABLED = false; // true: enabled, false: disabled

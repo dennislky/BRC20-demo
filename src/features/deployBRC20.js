@@ -8,6 +8,7 @@ import {
   Alert,
   AlertTitle,
   Divider,
+  TextField,
 } from "@mui/material";
 
 import { CardActionButton } from "../components/CardActionButton";
@@ -19,8 +20,17 @@ const DeployBRC20Card = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   // mobx store that link up with sdk wallets
-  const { walletStore } = useStore();
-  const { isInit, chainsAvailable, walletId, walletInfos } = walletStore;
+  const { walletStore, appStore } = useStore();
+  const {
+    isInit,
+    chainsAvailable,
+    walletId,
+    inscribeAddress,
+    deployAmount,
+    deployLimit,
+    deployTxHashList,
+  } = walletStore;
+  const { fromAddress, walletId: appStoreWalletId } = appStore;
 
   // local UI state cleanup when sdk re-initialized
   useEffect(() => {
@@ -28,13 +38,19 @@ const DeployBRC20Card = () => {
   }, [isInit]);
 
   // feature logic
+  const updateAddress = (event) => {
+    walletStore.setInscribeAddress(event.target.value);
+  };
+  const updateAmount = (event) => {
+    walletStore.setDeployAmount(event.target.value);
+  };
+  const updateLimit = (event) => {
+    walletStore.setDeployLimit(event.target.value);
+  };
   const deployBRC20 = async () => {
     try {
       setErrorMessage("");
-      const address = walletInfos.find(
-        (walletInfo) => walletInfo.coinType === "BTC"
-      ).address;
-      await walletStore.deployBRC20(address);
+      await walletStore.deployBRC20();
     } catch (err) {
       console.error(err);
       setErrorMessage(err.toString());
@@ -54,10 +70,34 @@ const DeployBRC20Card = () => {
         </CardContent>
         <Divider flexItem />
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
+          <TextField
+            label="Inscribe Address"
+            sx={{ pr: 1 }}
+            onChange={updateAddress}
+            value={fromAddress || inscribeAddress}
+          />
+          <TextField
+            label="Deploy Amount"
+            sx={{ pr: 1 }}
+            onChange={updateAmount}
+            type="number"
+            value={deployAmount}
+          />
+          <TextField
+            label="Mint Limit"
+            sx={{ pr: 1 }}
+            onChange={updateLimit}
+            type="number"
+            value={deployLimit}
+          />
           <CardActionButton
             buttonText="Deploy"
             onClick={deployBRC20}
-            disabled={!isInit || chainsAvailable?.length === 0 || !walletId}
+            disabled={
+              !isInit ||
+              chainsAvailable?.length === 0 ||
+              (!walletId && !appStoreWalletId)
+            }
             testId="deploy-brc20"
           />
         </CardActions>
@@ -67,6 +107,28 @@ const DeployBRC20Card = () => {
             {errorMessage}
           </Alert>
         )}
+        {deployTxHashList && deployTxHashList.length ? (
+          <Alert severity="success">
+            <AlertTitle>Success</AlertTitle>
+            <strong>
+              Transaction Hashes:
+              {deployTxHashList.map((data, index) => {
+                return (
+                  <div key={`data-${index}`}>
+                    <div>{`Operation: ${JSON.stringify(data.op)}`}</div>
+                    {data.txHashList.map((tx, txIndex) => {
+                      return (
+                        <div
+                          key={`tx-${txIndex}`}
+                        >{`${tx.itemId} Transaction Hash: ${tx.txHash}`}</div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </strong>
+          </Alert>
+        ) : null}
       </Card>
     </>
   ) : null;

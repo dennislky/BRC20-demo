@@ -31,6 +31,7 @@ const DemoAutocompleteCoinType = ({
       isOptionEqualToValue={(option, value) => option.value === value.value}
       groupBy={(option) => option.network}
       data-testid="autocomplete-coin-type"
+      defaultValue={coinTypeOptions[0]}
     />
   );
 };

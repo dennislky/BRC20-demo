@@ -25,7 +25,7 @@ import { useStore } from "../stores";
 // card per feature
 const GenerateMnemonicCard = () => {
   // local UI state
-  const [coinType, setCoinType] = useState();
+  const [coinType, setCoinType] = useState("BTC");
   const [network, setNetwork] = useState();
   const [segwitType, setSegwitType] = useState();
   const [mnemonic, setMnemonic] = useState();
@@ -35,10 +35,11 @@ const GenerateMnemonicCard = () => {
   // mobx store that link up with sdk wallets
   const { walletStore, appStore } = useStore();
   const { isInit, walletInfos, chainsAvailable } = walletStore;
+  const { walletId } = appStore;
 
   // local UI state cleanup when sdk re-initialized
   useEffect(() => {
-    setCoinType();
+    setCoinType("BTC");
     setMnemonic();
     setErrorMessage("");
     setShowDialog(false);
@@ -191,7 +192,7 @@ const GenerateMnemonicCard = () => {
           <CardActionButton
             buttonText="Generate Mnemonic"
             onClick={generateMnemonic}
-            disabled={!isInit || !!mnemonic}
+            disabled={!isInit || !!mnemonic || !!walletId}
             testId="generate-mnemonic"
           />
         </CardActions>
@@ -229,6 +230,7 @@ const GenerateMnemonicCard = () => {
                     walletInfo={walletInfo}
                     index={index}
                     callback={() => deletePrivateKey(index)}
+                    key={`wallet-info-${index}`}
                   />
                 ) : null;
               })}

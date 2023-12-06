@@ -7,6 +7,7 @@ import {
   CardActions,
   Typography,
   Grid,
+  TextField,
 } from "@mui/material";
 
 import { CardActionButton } from "../components/CardActionButton";
@@ -19,8 +20,18 @@ const InitSDKCard = () => {
   const [showDialog, setShowDialog] = useState(false);
 
   // mobx store that link up with sdk wallets
-  const { walletStore } = useStore();
-  const isInit = walletStore.isInit;
+  const { appStore, walletStore } = useStore();
+  const { isInit } = walletStore;
+  const {
+    apiKey,
+    apiProjectId,
+    apiPassphrase,
+    apiSecretKey,
+    fromAddress,
+    toAddress,
+    walletId,
+    privateKey,
+  } = appStore;
 
   // local UI state cleanup when sdk re-initialized
   useEffect(() => {
@@ -30,6 +41,7 @@ const InitSDKCard = () => {
   // event handler
   const confirmDialog = () => {
     walletStore.dispose();
+    appStore.dispose();
     setShowDialog(false);
   };
   const closeDialog = () => {
@@ -37,15 +49,38 @@ const InitSDKCard = () => {
   };
 
   // feature logic
+  const setupAPIKey = (event) => {
+    appStore.setAPIKey(event.target.value);
+  };
+  const setupAPIProjectId = (event) => {
+    appStore.setAPIProjectId(event.target.value);
+  };
+  const setupAPIPassphrase = (event) => {
+    appStore.setAPIPassphrase(event.target.value);
+  };
+  const setupAPISecretKey = (event) => {
+    appStore.setAPISecretKey(event.target.value);
+  };
+
+  const setupFromAddress = (event) => {
+    appStore.setFromAddress(event.target.value);
+  };
+  const setupToAddress = (event) => {
+    appStore.setToAddress(event.target.value);
+  };
+  const setupWalletId = (event) => {
+    appStore.setWalletId(event.target.value);
+  };
+  const setupPrivateKey = (event) => {
+    appStore.setPrivateKey(event.target.value);
+  };
+
   const initSDK = () => {
     walletStore.initialize();
   };
   const dispose = () => {
     setShowDialog(true);
   };
-  // const linkToGithub = () => {
-  //   window.open("https://github.com/dennislky/github-pages-test", "_blank");
-  // };
 
   // render logic
   return (
@@ -61,6 +96,61 @@ const InitSDKCard = () => {
             </Typography>
           )}
         </CardContent>
+        <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
+          <TextField
+            label="API Key"
+            sx={{ pr: 1 }}
+            onChange={setupAPIKey}
+            value={apiKey}
+          />
+          <TextField
+            label="API Project ID"
+            sx={{ pr: 1 }}
+            onChange={setupAPIProjectId}
+            value={apiProjectId}
+          />
+          <TextField
+            label="API Passphrase"
+            sx={{ pr: 1 }}
+            onChange={setupAPIPassphrase}
+            type="password"
+            value={apiPassphrase}
+          />
+          <TextField
+            label="API Secret Key"
+            sx={{ pr: 1 }}
+            onChange={setupAPISecretKey}
+            type="password"
+            value={apiSecretKey}
+          />
+        </CardActions>
+        <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
+          <TextField
+            label="From Address"
+            sx={{ pr: 1 }}
+            onChange={setupFromAddress}
+            value={fromAddress}
+          />
+          <TextField
+            label="To Address"
+            sx={{ pr: 1 }}
+            onChange={setupToAddress}
+            value={toAddress}
+          />
+          <TextField
+            label="Wallet ID"
+            sx={{ pr: 1 }}
+            onChange={setupWalletId}
+            value={walletId}
+          />
+          <TextField
+            label="Private Key"
+            sx={{ pr: 1 }}
+            onChange={setupPrivateKey}
+            type="password"
+            value={privateKey}
+          />
+        </CardActions>
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
           {!isInit ? (
             <CardActionButton

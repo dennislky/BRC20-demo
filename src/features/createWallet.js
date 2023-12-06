@@ -19,8 +19,9 @@ const CreateWalletCard = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   // mobx store that link up with sdk wallets
-  const { walletStore } = useStore();
+  const { walletStore, appStore } = useStore();
   const { isInit, chainsAvailable, walletId } = walletStore;
+  const { walletId: appStoreWalletId } = appStore;
 
   // local UI state cleanup when sdk re-initialized
   useEffect(() => {
@@ -31,7 +32,7 @@ const CreateWalletCard = () => {
   const createWallet = async () => {
     try {
       setErrorMessage("");
-      walletStore.createWallet();
+      await walletStore.createWallet();
     } catch (err) {
       console.error(err);
       setErrorMessage(err.toString());
@@ -54,7 +55,12 @@ const CreateWalletCard = () => {
           <CardActionButton
             buttonText="Create Wallet"
             onClick={createWallet}
-            disabled={!isInit || chainsAvailable?.length === 0 || walletId}
+            disabled={
+              !isInit ||
+              chainsAvailable?.length === 0 ||
+              !!walletId ||
+              !!appStoreWalletId
+            }
             testId="create-wallet"
           />
         </CardActions>

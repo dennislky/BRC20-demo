@@ -18,21 +18,31 @@ export const getRequestUrl = (path, searchParams) => {
   return `${host}${getRequestPathWithSearchParams(path, searchParams)}`;
 };
 
-export const headerParams = (timestamp, method, url, body = "") => {
-  console.log(timestamp, method, url, body);
+export const headerParams = (
+  timestamp,
+  method,
+  url,
+  body = "",
+  API_KEY = "",
+  PROJECT_ID = "",
+  PASSPHRASE = "",
+  SECRET_KEY = ""
+) => {
+  // console.log(timestamp, method, url, body);
   const message =
     method === METHOD_POST
       ? timestamp + method + url + body
       : timestamp + method + url;
-  const sha256hmac = sha256.hmac.create(process.env.REACT_APP_SECRET_KEY);
+  const sha256hmac = sha256.hmac.create(
+    SECRET_KEY || process.env.REACT_APP_SECRET_KEY
+  );
   const messageHash = sha256hmac.update(message).array();
   const signature = Buffer.from(messageHash).toString("base64");
-  console.log(messageHash, signature);
   return {
     "Content-Type": "application/json",
-    "OK-ACCESS-KEY": process.env.REACT_APP_API_KEY,
-    "OK-ACCESS-PASSPHRASE": process.env.REACT_APP_PASSPHRASE,
-    "OK-ACCESS-PROJECT": process.env.REACT_APP_PROJECT_ID,
+    "OK-ACCESS-KEY": API_KEY || process.env.REACT_APP_API_KEY,
+    "OK-ACCESS-PASSPHRASE": PASSPHRASE || process.env.REACT_APP_PASSPHRASE,
+    "OK-ACCESS-PROJECT": PROJECT_ID || process.env.REACT_APP_PROJECT_ID,
     "OK-ACCESS-TIMESTAMP": timestamp,
     "OK-ACCESS-SIGN": signature,
   };

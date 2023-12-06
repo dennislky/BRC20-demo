@@ -20,8 +20,9 @@ const GetTransactionsCard = () => {
   const [transactions, setTransactions] = useState();
 
   // mobx store that link up with sdk wallets
-  const { walletStore } = useStore();
+  const { walletStore, appStore } = useStore();
   const { isInit, chainsAvailable, walletId } = walletStore;
+  const { walletId: appStoreWalletId } = appStore;
 
   // local UI state cleanup when sdk re-initialized
   useEffect(() => {
@@ -34,7 +35,7 @@ const GetTransactionsCard = () => {
     try {
       setErrorMessage("");
       const data = await walletStore.getTransactions();
-      console.log(data);
+      console.log("getTransactions data", data);
       setTransactions(data);
     } catch (err) {
       console.error(err);
@@ -58,7 +59,11 @@ const GetTransactionsCard = () => {
           <CardActionButton
             buttonText="Get Transactions"
             onClick={getTransactions}
-            disabled={!isInit || chainsAvailable?.length === 0 || !walletId}
+            disabled={
+              !isInit ||
+              chainsAvailable?.length === 0 ||
+              (!walletId && !appStoreWalletId)
+            }
             testId="get-transactions"
           />
         </CardActions>

@@ -13,7 +13,7 @@ const InitSDKCard = lazy(() => import("./features/initSDK"));
 //   import("./features/generatePrivateKey")
 // );
 const GenerateMnemonicCard = lazy(() => import("./features/generateMnemonic"));
-const GetAllChainsCard = lazy(() => import("./features/getAllChains"));
+// const GetAllChainsCard = lazy(() => import("./features/getAllChains"));
 // const GetAllCoinsCard = lazy(() => import("./features/getAllCoins"));
 const CreateWalletCard = lazy(() => import("./features/createWallet"));
 const GetBalanceCard = lazy(() => import("./features/getBalance"));
@@ -24,6 +24,7 @@ const GetTransactionsCard = lazy(() => import("./features/getTransactions"));
 const DeployBRC20Card = lazy(() => import("./features/deployBRC20"));
 const MintBRC20Card = lazy(() => import("./features/mintBRC20"));
 const TransferBRC20Card = lazy(() => import("./features/transferBRC20"));
+const TransferBRC20NFTCard = lazy(() => import("./features/transferBRC20NFT"));
 
 const defaultTheme = createTheme();
 export default function Dashboard() {
@@ -45,15 +46,15 @@ export default function Dashboard() {
         >
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Typography variant="h4" sx={{ mb: 4 }}>
-              OKX WaaS Demo
+              OKX WaaS BRC20 Demo
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <InitSDKCard />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <GetAllChainsCard />
-              </Grid>
+              </Grid> */}
               {/* <Grid item xs={12}>
                 <GetAllCoinsCard />
               </Grid> */}
@@ -70,12 +71,6 @@ export default function Dashboard() {
                 <GetBalanceCard />
               </Grid>
               <Grid item xs={12}>
-                <GetTransactionsCard />
-              </Grid>
-              {/* <Grid item xs={12}>
-                <GetTransactionDetailCard />
-              </Grid> */}
-              <Grid item xs={12}>
                 <DeployBRC20Card />
               </Grid>
               <Grid item xs={12}>
@@ -84,6 +79,15 @@ export default function Dashboard() {
               <Grid item xs={12}>
                 <TransferBRC20Card />
               </Grid>
+              <Grid item xs={12}>
+                <TransferBRC20NFTCard />
+              </Grid>
+              <Grid item xs={12}>
+                <GetTransactionsCard />
+              </Grid>
+              {/* <Grid item xs={12}>
+                <GetTransactionDetailCard />
+              </Grid> */}
             </Grid>
             <DemoSnackBar />
           </Container>

@@ -20,8 +20,9 @@ const GetBalanceCard = () => {
   const [balances, setBalances] = useState();
 
   // mobx store that link up with sdk wallets
-  const { walletStore } = useStore();
+  const { walletStore, appStore } = useStore();
   const { isInit, chainsAvailable, walletId } = walletStore;
+  const { walletId: appStoreWalletId } = appStore;
 
   // local UI state cleanup when sdk re-initialized
   useEffect(() => {
@@ -34,7 +35,6 @@ const GetBalanceCard = () => {
     try {
       setErrorMessage("");
       const data = await walletStore.getBalance();
-      console.log(data);
       setBalances(data);
     } catch (err) {
       console.error(err);
@@ -58,7 +58,11 @@ const GetBalanceCard = () => {
           <CardActionButton
             buttonText="Get Balance"
             onClick={getBalance}
-            disabled={!isInit || chainsAvailable?.length === 0 || !walletId}
+            disabled={
+              !isInit ||
+              chainsAvailable?.length === 0 ||
+              (!walletId && !appStoreWalletId)
+            }
             testId="get-balance"
           />
         </CardActions>
@@ -68,26 +72,31 @@ const GetBalanceCard = () => {
             {errorMessage}
           </Alert>
         )}
-        {balances ? (
+        {balances && balances.length ? (
           <Alert severity="success">
             <AlertTitle>Success</AlertTitle>
             <strong>
-              Token Balances:{" "}
-              {balances[0].tokenAssets.map((balance) => {
+              Token Balances:
+              {balances[0].tokenAssets.map((balance, index) => {
                 return (
-                  <div>
+                  <div key={`token-assets-${index}`}>
                     {balance.symbol}: {balance.balance}
                   </div>
                 );
               })}
             </strong>
-            {/* <strong>BRC20 Balances: {balances[0].brc20TokenAssets.map(balance => {
-              return (
-                <div>
-                  <p>{balance.symbol}: {balance.balance}</p>
-                </div>
-              )
-            })}</strong> */}
+            <strong>
+              BRC20 Balances:{" "}
+              {balances[0].brc20TokenAssets.map((balance, index) => {
+                return (
+                  <p key={`brc20-token-assets-${index}`}>
+                    {balance.symbol}: Total Balance: {balance.totalBalance},
+                    Available Balance: {balance.availableBalance}, Transferable
+                    Balance: {balance.transferableBalance}
+                  </p>
+                );
+              })}
+            </strong>
           </Alert>
         ) : null}
       </Card>

@@ -37,7 +37,7 @@ const validateAddress = (walletInfo, appStore, walletStore) => {
 const DemoWalletInfo = ({ walletInfo, index, callback }) => {
   const { appStore, walletStore } = useStore();
   return (
-    <div key={`wallet-info-${index}`}>
+    <div>
       <Alert severity="success" data-testid={`wallet-info-${index}`}>
         <Grid container spacing={2}>
           <Grid item xs>

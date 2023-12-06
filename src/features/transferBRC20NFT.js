@@ -15,7 +15,7 @@ import { CardActionButton } from "../components/CardActionButton";
 import { useStore } from "../stores";
 
 // card per feature
-const MintBRC20Card = () => {
+const TransferBRC20NFTCard = () => {
   // local UI state
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -26,10 +26,10 @@ const MintBRC20Card = () => {
     chainsAvailable,
     walletId,
     inscribeAddress,
-    mintAmount,
-    mintTxHashList,
+    transferAddress,
+    transferAmount,
   } = walletStore;
-  const { fromAddress, walletId: appStoreWalletId } = appStore;
+  const { fromAddress, toAddress, walletId: appStoreWalletId } = appStore;
 
   // local UI state cleanup when sdk re-initialized
   useEffect(() => {
@@ -37,16 +37,19 @@ const MintBRC20Card = () => {
   }, [isInit]);
 
   // feature logic
-  const updateAddress = (event) => {
+  const updateInscribeAddress = (event) => {
     walletStore.setInscribeAddress(event.target.value);
   };
-  const updateAmount = (event) => {
-    walletStore.setMintAmount(event.target.value);
+  const updateTransferAddress = (event) => {
+    walletStore.setTransferAddress(event.target.value);
   };
-  const mintBRC20 = async () => {
+  const updateAmount = (event) => {
+    walletStore.setTransferAmount(event.target.value);
+  };
+  const transferBRC20NFT = async () => {
     try {
       setErrorMessage("");
-      await walletStore.mintBRC20();
+      await walletStore.transferBRC20NFT();
     } catch (err) {
       console.error(err);
       setErrorMessage(err.toString());
@@ -59,35 +62,41 @@ const MintBRC20Card = () => {
       <Card
         variant="outlined"
         sx={{ minWidth: 275, borderRadius: 5 }}
-        key="mint-brc20-card"
+        key="transfer-brc20-card"
       >
         <CardContent sx={{ pb: 1 }}>
-          <Typography sx={{ fontSize: 26 }}>Mint BRC20</Typography>
+          <Typography sx={{ fontSize: 26 }}>Transfer BRC20 NFT</Typography>
         </CardContent>
         <Divider flexItem />
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
           <TextField
             label="Inscribe Address"
             sx={{ pr: 1 }}
-            onChange={updateAddress}
+            onChange={updateInscribeAddress}
             value={fromAddress || inscribeAddress}
           />
           <TextField
-            label="Mint Amount"
+            label="Transfer Address"
+            sx={{ pr: 1 }}
+            onChange={updateTransferAddress}
+            value={toAddress || transferAddress}
+          />
+          <TextField
+            label="Transfer Amount"
             sx={{ pr: 1 }}
             onChange={updateAmount}
             type="number"
-            value={mintAmount}
+            value={transferAmount}
           />
           <CardActionButton
-            buttonText="Mint"
-            onClick={mintBRC20}
+            buttonText="Transfer"
+            onClick={transferBRC20NFT}
             disabled={
               !isInit ||
               chainsAvailable?.length === 0 ||
               (!walletId && !appStoreWalletId)
             }
-            testId="mint-brc20"
+            testId="transfer-brc20-nft"
           />
         </CardActions>
         {errorMessage && (
@@ -96,12 +105,12 @@ const MintBRC20Card = () => {
             {errorMessage}
           </Alert>
         )}
-        {mintTxHashList && mintTxHashList.length ? (
+        {/* {transferTxHashList && transferTxHashList.length ? (
           <Alert severity="success">
             <AlertTitle>Success</AlertTitle>
             <strong>
               Transaction Hashes:
-              {mintTxHashList.map((data, index) => {
+              {transferTxHashList.map((data, index) => {
                 return (
                   <p key={`data-${index}`}>
                     <div>{`Operation: ${JSON.stringify(data.op)}`}</div>
@@ -117,10 +126,10 @@ const MintBRC20Card = () => {
               })}
             </strong>
           </Alert>
-        ) : null}
+        ) : null} */}
       </Card>
     </>
   ) : null;
 };
 
-export default observer(MintBRC20Card);
+export default observer(TransferBRC20NFTCard);
