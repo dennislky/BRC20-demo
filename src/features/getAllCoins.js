@@ -73,9 +73,9 @@ const GetAllCoinsCard = () => {
               return (
                 <div key={`coin-${coin.coinId}`}>
                   <div>
-                    <strong>Coin Name: {coin.name}</strong>
+                    <div>Coin Name: {coin.name}</div>
                     <br />
-                    <strong>Coin ID: {coin.coinId}</strong>
+                    <div>Coin ID: {coin.coinId}</div>
                   </div>
                   {index < coinsAvailable.length - 1 ? <br /> : null}
                 </div>

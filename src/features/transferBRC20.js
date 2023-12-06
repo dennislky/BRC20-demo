@@ -9,10 +9,12 @@ import {
   AlertTitle,
   Divider,
   TextField,
+  Link,
 } from "@mui/material";
 
 import { CardActionButton } from "../components/CardActionButton";
 import { useStore } from "../stores";
+import { OKLINK_TRANSACTION_PREFIX } from "../constants";
 
 // card per feature
 const TransferBRC20Card = () => {
@@ -25,8 +27,8 @@ const TransferBRC20Card = () => {
     isInit,
     chainsAvailable,
     walletId,
+    tickName,
     inscribeAddress,
-    // transferAddress,
     transferAmount,
     transferTxHashList,
   } = walletStore;
@@ -38,12 +40,12 @@ const TransferBRC20Card = () => {
   }, [isInit]);
 
   // feature logic
+  const updateTickName = (event) => {
+    walletStore.setTickName(event.target.value);
+  };
   const updateInscribeAddress = (event) => {
     walletStore.setInscribeAddress(event.target.value);
   };
-  // const updateTransferAddress = (event) => {
-  //   walletStore.setTransferAddress(event.target.value);
-  // };
   const updateAmount = (event) => {
     walletStore.setTransferAmount(event.target.value);
   };
@@ -71,17 +73,17 @@ const TransferBRC20Card = () => {
         <Divider flexItem />
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
           <TextField
+            label="Tick Name"
+            sx={{ pr: 1 }}
+            onChange={updateTickName}
+            value={tickName}
+          />
+          <TextField
             label="Inscribe Address"
             sx={{ pr: 1 }}
             onChange={updateInscribeAddress}
             value={fromAddress || inscribeAddress}
           />
-          {/* <TextField
-            label="Transfer Address"
-            sx={{ pr: 1 }}
-            onChange={updateTransferAddress}
-            value={transferAddress}
-          /> */}
           <TextField
             label="Transfer Amount"
             sx={{ pr: 1 }}
@@ -108,24 +110,29 @@ const TransferBRC20Card = () => {
         )}
         {transferTxHashList && transferTxHashList.length ? (
           <Alert severity="success">
-            <AlertTitle>Success</AlertTitle>
-            <strong>
-              Transaction Hashes:
-              {transferTxHashList.map((data, index) => {
-                return (
-                  <p key={`data-${index}`}>
-                    <div>{`Operation: ${JSON.stringify(data.op)}`}</div>
-                    {data.txHashList.map((tx, txIndex) => {
-                      return (
-                        <div
-                          key={`tx-${txIndex}`}
-                        >{`${tx.itemId} Transaction Hash: ${tx.txHash}`}</div>
-                      );
-                    })}
-                  </p>
-                );
-              })}
-            </strong>
+            <AlertTitle>Transactions</AlertTitle>
+            {transferTxHashList.map((data, index) => {
+              return (
+                <div key={`data-${index}`}>
+                  <div>{`Operation: ${JSON.stringify(data.op)}`}</div>
+                  {data.txHashList.map((tx, txIndex) => {
+                    return (
+                      <div key={`tx-${txIndex}`}>
+                        <div>{`${tx.itemId} transaction link: `}</div>
+                        <Link
+                          href={`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          {`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                        </Link>
+                        {txIndex < data.txHashList.length ? <br /> : null}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
           </Alert>
         ) : null}
       </Card>

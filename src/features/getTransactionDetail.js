@@ -9,10 +9,12 @@ import {
   AlertTitle,
   Divider,
   TextField,
+  Link,
 } from "@mui/material";
 
 import { CardActionButton } from "../components/CardActionButton";
 import { useStore } from "../stores";
+import { OKLINK_TRANSACTION_PREFIX } from "../constants";
 
 // card per feature
 const GetTransactionDetailCard = () => {
@@ -89,12 +91,20 @@ const GetTransactionDetailCard = () => {
         {txDetail ? (
           <Alert severity="success">
             <AlertTitle>Success</AlertTitle>
-            <strong>
-              Transaction Detail: {txDetail.orderId} ({txDetail.txHash}) <br />{" "}
-              [Chain ID: {txDetail.chainId}]: from {txDetail.fromAddr} to{" "}
-              {txDetail.toAddr} at{" "}
-              {new Date(parseInt(txDetail.txTime, 10)).toISOString()}
-            </strong>
+            <div>
+              <div>{`Transaction Detail: ${txDetail.orderId}`}</div>
+              <Link
+                href={`${OKLINK_TRANSACTION_PREFIX}${txDetail.txHash}`}
+                target="_blank"
+                rel="noopener"
+              >{`Link: ${OKLINK_TRANSACTION_PREFIX}${txDetail.txHash}`}</Link>
+              <div>{`Chain ID: ${txDetail.chainId}`}</div>
+              <div>{`From Address: ${txDetail.fromAddr}`}</div>
+              <div>{`To Address: ${txDetail.toAddr}`}</div>
+              <div>{`Time: ${new Date(
+                parseInt(txDetail.txTime, 10)
+              ).toISOString()}`}</div>
+            </div>
           </Alert>
         ) : null}
       </Card>

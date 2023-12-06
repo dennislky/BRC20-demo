@@ -20,7 +20,7 @@ const CreateWalletCard = () => {
 
   // mobx store that link up with sdk wallets
   const { walletStore, appStore } = useStore();
-  const { isInit, chainsAvailable, walletId } = walletStore;
+  const { isInit, chainsAvailable, walletId, walletInfos } = walletStore;
   const { walletId: appStoreWalletId } = appStore;
 
   // local UI state cleanup when sdk re-initialized
@@ -59,7 +59,8 @@ const CreateWalletCard = () => {
               !isInit ||
               chainsAvailable?.length === 0 ||
               !!walletId ||
-              !!appStoreWalletId
+              !!appStoreWalletId ||
+              !walletInfos.length
             }
             testId="create-wallet"
           />
@@ -73,7 +74,7 @@ const CreateWalletCard = () => {
         {walletId ? (
           <Alert severity="success">
             <AlertTitle>Success</AlertTitle>
-            <strong>Wallet ID: {walletId}</strong>
+            <div>Wallet ID: {walletId}</div>
           </Alert>
         ) : null}
       </Card>

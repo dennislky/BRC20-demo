@@ -28,6 +28,7 @@ const TransferBRC20NFTCard = () => {
     inscribeAddress,
     transferAddress,
     transferAmount,
+    transferOrderId,
   } = walletStore;
   const { fromAddress, toAddress, walletId: appStoreWalletId } = appStore;
 
@@ -105,28 +106,14 @@ const TransferBRC20NFTCard = () => {
             {errorMessage}
           </Alert>
         )}
-        {/* {transferTxHashList && transferTxHashList.length ? (
+        {transferOrderId ? (
           <Alert severity="success">
             <AlertTitle>Success</AlertTitle>
-            <strong>
-              Transaction Hashes:
-              {transferTxHashList.map((data, index) => {
-                return (
-                  <p key={`data-${index}`}>
-                    <div>{`Operation: ${JSON.stringify(data.op)}`}</div>
-                    {data.txHashList.map((tx, txIndex) => {
-                      return (
-                        <div
-                          key={`tx-${txIndex}`}
-                        >{`${tx.itemId} Transaction Hash: ${tx.txHash}`}</div>
-                      );
-                    })}
-                  </p>
-                );
-              })}
-            </strong>
+            <div>
+              <div>Transaction Order ID: {transferOrderId}</div>
+            </div>
           </Alert>
-        ) : null} */}
+        ) : null}
       </Card>
     </>
   ) : null;

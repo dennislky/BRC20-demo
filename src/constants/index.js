@@ -44,6 +44,11 @@ export const BRC20_TYPE_DEPLOY = "BRC20_DEPLOY";
 export const BRC20_TYPE_MINT = "BRC20_MINT";
 export const BRC20_TYPE_TRANSFER = "BRC20_TRANSFER";
 
+export const OKLINK_ADDRESS_PREFIX = "https://www.oklink.com/btc/address/";
+export const OKLINK_TRANSACTION_PREFIX = "https://www.oklink.com/btc/tx/";
+export const OKLINK_BRC20_LIST_URL = "https://www.oklink.com/btc/token-list";
+export const OKX_BUILD_URL = "https://www.okx.com/web3/build/dev-portal";
+
 export const API_KEY = process.env.REACT_APP_API_KEY;
 export const PASSPHRASE = process.env.REACT_APP_PASSPHRASE;
 export const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
@@ -56,3 +61,4 @@ export const TEMP_PRIVATE_KEY = process.env.REACT_APP_TEMP_PRIVATE_KEY;
 
 export const FEE_RATE_MODE = 1; // 0: max, 1: normal
 export const IS_SEND_TRANSACTION_BATCH_ENABLED = false; // true: enabled, false: disabled
+export const IS_MOCKING_BRC20_API = true; // true: enabled, false: disabled

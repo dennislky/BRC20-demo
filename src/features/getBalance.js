@@ -73,31 +73,38 @@ const GetBalanceCard = () => {
           </Alert>
         )}
         {balances && balances.length ? (
-          <Alert severity="success">
-            <AlertTitle>Success</AlertTitle>
-            <strong>
-              Token Balances:
+          <div>
+            <Alert severity="success">
+              <AlertTitle>Token Balances</AlertTitle>
               {balances[0].tokenAssets.map((balance, index) => {
                 return (
                   <div key={`token-assets-${index}`}>
-                    {balance.symbol}: {balance.balance}
+                    <div>
+                      {balance.balance} {balance.symbol}
+                    </div>
+                    {index < balances[0].tokenAssets.length - 1 ? <br /> : null}
                   </div>
                 );
               })}
-            </strong>
-            <strong>
-              BRC20 Balances:{" "}
+            </Alert>
+            <Alert severity="success">
+              <AlertTitle>BRC20 Balances</AlertTitle>
               {balances[0].brc20TokenAssets.map((balance, index) => {
                 return (
-                  <p key={`brc20-token-assets-${index}`}>
-                    {balance.symbol}: Total Balance: {balance.totalBalance},
-                    Available Balance: {balance.availableBalance}, Transferable
-                    Balance: {balance.transferableBalance}
-                  </p>
+                  <div key={`brc20-token-assets-${index}`}>
+                    <div>
+                      {balance.symbol}: Total Balance: {balance.totalBalance},
+                      Available Balance: {balance.availableBalance},
+                      Transferable Balance: {balance.transferableBalance}
+                    </div>
+                    {index < balances[0].brc20TokenAssets.length - 1 ? (
+                      <br />
+                    ) : null}
+                  </div>
                 );
               })}
-            </strong>
-          </Alert>
+            </Alert>
+          </div>
         ) : null}
       </Card>
     </>

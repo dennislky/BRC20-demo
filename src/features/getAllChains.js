@@ -71,9 +71,9 @@ const GetAllChainsCard = () => {
               return (
                 <div key={`chain-${chain.chainId}`}>
                   <div>
-                    <strong>Chain Name: {chain.name}</strong>
+                    <div>Chain Name: {chain.name}</div>
                     <br />
-                    <strong>Chain ID: {chain.chainId}</strong>
+                    <div>Chain ID: {chain.chainId}</div>
                   </div>
                   {index < chainsAvailable.length - 1 ? <br /> : null}
                 </div>

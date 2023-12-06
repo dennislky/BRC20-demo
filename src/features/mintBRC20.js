@@ -9,10 +9,12 @@ import {
   AlertTitle,
   Divider,
   TextField,
+  Link,
 } from "@mui/material";
 
 import { CardActionButton } from "../components/CardActionButton";
 import { useStore } from "../stores";
+import { OKLINK_TRANSACTION_PREFIX } from "../constants";
 
 // card per feature
 const MintBRC20Card = () => {
@@ -25,6 +27,7 @@ const MintBRC20Card = () => {
     isInit,
     chainsAvailable,
     walletId,
+    tickName,
     inscribeAddress,
     mintAmount,
     mintTxHashList,
@@ -37,6 +40,9 @@ const MintBRC20Card = () => {
   }, [isInit]);
 
   // feature logic
+  const updateTickName = (event) => {
+    walletStore.setTickName(event.target.value);
+  };
   const updateAddress = (event) => {
     walletStore.setInscribeAddress(event.target.value);
   };
@@ -66,6 +72,12 @@ const MintBRC20Card = () => {
         </CardContent>
         <Divider flexItem />
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
+          <TextField
+            label="Tick Name"
+            sx={{ pr: 1 }}
+            onChange={updateTickName}
+            value={tickName}
+          />
           <TextField
             label="Inscribe Address"
             sx={{ pr: 1 }}
@@ -98,24 +110,29 @@ const MintBRC20Card = () => {
         )}
         {mintTxHashList && mintTxHashList.length ? (
           <Alert severity="success">
-            <AlertTitle>Success</AlertTitle>
-            <strong>
-              Transaction Hashes:
-              {mintTxHashList.map((data, index) => {
-                return (
-                  <p key={`data-${index}`}>
-                    <div>{`Operation: ${JSON.stringify(data.op)}`}</div>
-                    {data.txHashList.map((tx, txIndex) => {
-                      return (
-                        <div
-                          key={`tx-${txIndex}`}
-                        >{`${tx.itemId} Transaction Hash: ${tx.txHash}`}</div>
-                      );
-                    })}
-                  </p>
-                );
-              })}
-            </strong>
+            <AlertTitle>Transactions</AlertTitle>
+            {mintTxHashList.map((data, index) => {
+              return (
+                <div key={`data-${index}`}>
+                  <div>{`Operation: ${JSON.stringify(data.op)}`}</div>
+                  {data.txHashList.map((tx, txIndex) => {
+                    return (
+                      <div key={`tx-${txIndex}`}>
+                        <div>{`${tx.itemId} transaction link: `}</div>
+                        <Link
+                          href={`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          {`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                        </Link>
+                        {txIndex < data.txHashList.length ? <br /> : null}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
           </Alert>
         ) : null}
       </Card>

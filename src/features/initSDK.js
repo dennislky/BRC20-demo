@@ -8,11 +8,13 @@ import {
   Typography,
   Grid,
   TextField,
+  Link,
 } from "@mui/material";
 
 import { CardActionButton } from "../components/CardActionButton";
 import { DemoDialog } from "../components/DemoDialog";
 import { useStore } from "../stores";
+import { OKLINK_ADDRESS_PREFIX, OKX_BUILD_URL } from "../constants";
 
 // card per feature
 const InitSDKCard = () => {
@@ -28,7 +30,7 @@ const InitSDKCard = () => {
     apiPassphrase,
     apiSecretKey,
     fromAddress,
-    toAddress,
+    // toAddress,
     walletId,
     privateKey,
   } = appStore;
@@ -65,9 +67,9 @@ const InitSDKCard = () => {
   const setupFromAddress = (event) => {
     appStore.setFromAddress(event.target.value);
   };
-  const setupToAddress = (event) => {
-    appStore.setToAddress(event.target.value);
-  };
+  // const setupToAddress = (event) => {
+  //   appStore.setToAddress(event.target.value);
+  // };
   const setupWalletId = (event) => {
     appStore.setWalletId(event.target.value);
   };
@@ -88,13 +90,21 @@ const InitSDKCard = () => {
       <Card variant="outlined" sx={{ minWidth: 275, borderRadius: 5 }}>
         <CardContent sx={{ pb: 1 }}>
           <Typography display="inline" sx={{ fontSize: 26 }}>
-            OKX Wallet SDK
+            Configurations
           </Typography>
           {isInit && (
             <Typography display="inline" sx={{ fontSize: 14, color: "blue" }}>
               {" (Initialized)"}
             </Typography>
           )}
+        </CardContent>
+        <CardContent sx={{ pb: 1 }}>
+          <Typography display="inline" sx={{ fontSize: 16 }}>
+            OKX Build Configurations:{" "}
+          </Typography>
+          <Link href={OKX_BUILD_URL} target="_blank" rel="noopener">
+            {OKX_BUILD_URL}
+          </Link>
         </CardContent>
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
           <TextField
@@ -124,25 +134,31 @@ const InitSDKCard = () => {
             value={apiSecretKey}
           />
         </CardActions>
+        <CardContent sx={{ pb: 1 }}>
+          <Typography display="inline" sx={{ fontSize: 16 }}>
+            Wallet Import Configurations
+          </Typography>
+        </CardContent>
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
+          <TextField
+            label="Wallet ID"
+            sx={{ pr: 1 }}
+            onChange={setupWalletId}
+            value={walletId}
+            helperText="optional, if provided, please also provide corresponding API Key"
+          />
           <TextField
             label="From Address"
             sx={{ pr: 1 }}
             onChange={setupFromAddress}
             value={fromAddress}
           />
-          <TextField
+          {/* <TextField
             label="To Address"
             sx={{ pr: 1 }}
             onChange={setupToAddress}
             value={toAddress}
-          />
-          <TextField
-            label="Wallet ID"
-            sx={{ pr: 1 }}
-            onChange={setupWalletId}
-            value={walletId}
-          />
+          /> */}
           <TextField
             label="Private Key"
             sx={{ pr: 1 }}
@@ -151,6 +167,34 @@ const InitSDKCard = () => {
             value={privateKey}
           />
         </CardActions>
+        {fromAddress ? (
+          <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
+            <Typography display="inline" sx={{ fontSize: 16 }}>
+              Inscription List:{" "}
+            </Typography>
+            <Link
+              href={`${OKLINK_ADDRESS_PREFIX}${fromAddress}/inscription`}
+              target="_blank"
+              rel="noopener"
+            >
+              {`${OKLINK_ADDRESS_PREFIX}/${fromAddress}/inscription`}
+            </Link>
+          </CardActions>
+        ) : null}
+        {/* {toAddress ? (
+          <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
+            <Typography display="inline" sx={{ fontSize: 16 }}>
+              To Address Inscription Link:{" "}
+            </Typography>
+            <Link
+              href={`${OKLINK_ADDRESS_PREFIX}/${toAddress}/inscription`}
+              target="_blank"
+              rel="noopener"
+            >
+              {`${OKLINK_ADDRESS_PREFIX}/${toAddress}/inscription`}
+            </Link>
+          </CardActions>
+        ) : null} */}
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
           {!isInit ? (
             <CardActionButton

@@ -9,10 +9,12 @@ import {
   AlertTitle,
   Divider,
   TextField,
+  Link,
 } from "@mui/material";
 
 import { CardActionButton } from "../components/CardActionButton";
 import { useStore } from "../stores";
+import { OKLINK_BRC20_LIST_URL, OKLINK_TRANSACTION_PREFIX } from "../constants";
 
 // card per feature
 const DeployBRC20Card = () => {
@@ -25,6 +27,7 @@ const DeployBRC20Card = () => {
     isInit,
     chainsAvailable,
     walletId,
+    tickName,
     inscribeAddress,
     deployAmount,
     deployLimit,
@@ -38,6 +41,9 @@ const DeployBRC20Card = () => {
   }, [isInit]);
 
   // feature logic
+  const updateTickName = (event) => {
+    walletStore.setTickName(event.target.value);
+  };
   const updateAddress = (event) => {
     walletStore.setInscribeAddress(event.target.value);
   };
@@ -69,7 +75,21 @@ const DeployBRC20Card = () => {
           <Typography sx={{ fontSize: 26 }}>Deploy BRC20</Typography>
         </CardContent>
         <Divider flexItem />
+        <CardContent sx={{ pb: 1 }}>
+          <Typography display="inline" sx={{ fontSize: 16 }}>
+            Please check if your proposed tick name already exists:{" "}
+          </Typography>
+          <Link href={OKLINK_BRC20_LIST_URL} target="_blank" rel="noopener">
+            {OKLINK_BRC20_LIST_URL}
+          </Link>
+        </CardContent>
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
+          <TextField
+            label="Tick Name"
+            sx={{ pr: 1 }}
+            onChange={updateTickName}
+            value={tickName}
+          />
           <TextField
             label="Inscribe Address"
             sx={{ pr: 1 }}
@@ -109,24 +129,31 @@ const DeployBRC20Card = () => {
         )}
         {deployTxHashList && deployTxHashList.length ? (
           <Alert severity="success">
-            <AlertTitle>Success</AlertTitle>
-            <strong>
-              Transaction Hashes:
-              {deployTxHashList.map((data, index) => {
-                return (
-                  <div key={`data-${index}`}>
-                    <div>{`Operation: ${JSON.stringify(data.op)}`}</div>
-                    {data.txHashList.map((tx, txIndex) => {
-                      return (
-                        <div
-                          key={`tx-${txIndex}`}
-                        >{`${tx.itemId} Transaction Hash: ${tx.txHash}`}</div>
-                      );
-                    })}
-                  </div>
-                );
-              })}
-            </strong>
+            <AlertTitle>Transactions</AlertTitle>
+            {deployTxHashList.map((data, index) => {
+              return (
+                <div key={`data-${index}`}>
+                  <div>{`Operation: ${JSON.stringify(data.op)}`}</div>
+                  <br />
+                  {data.txHashList.map((tx, txIndex) => {
+                    console.log(txIndex < data.txHashList.length);
+                    return (
+                      <div key={`tx-${txIndex}`}>
+                        <div>{`${tx.itemId} transaction link: `}</div>
+                        <Link
+                          href={`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          {`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                        </Link>
+                        {txIndex < data.txHashList.length ? <br /> : null}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
           </Alert>
         ) : null}
       </Card>

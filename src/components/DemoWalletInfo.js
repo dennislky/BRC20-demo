@@ -57,43 +57,41 @@ const DemoWalletInfo = ({ walletInfo, index, callback }) => {
             </IconButton>
           </Grid>
         </Grid>
-        {walletInfo.coinType && (
-          <strong>{`Chain: ${walletInfo.coinType}`}</strong>
-        )}
+        {walletInfo.coinType && <div>{`Chain: ${walletInfo.coinType}`}</div>}
         {walletInfo.chainId ? (
           <>
             <br />
-            <strong>{`Chain ID: ${walletInfo.chainId}`}</strong>
+            <div>{`Chain ID: ${walletInfo.chainId}`}</div>
           </>
         ) : null}
         {walletInfo.segwitType && (
           <>
             <br />
-            <strong>{`Segwit Type: ${walletInfo.segwitType}`}</strong>
+            <div>{`Segwit Type: ${walletInfo.segwitType}`}</div>
           </>
         )}
         {walletInfo.derivedPath && (
           <>
             <br />
-            <strong>{`Derivation Path: ${walletInfo.derivedPath}`}</strong>
+            <div>{`Derivation Path: ${walletInfo.derivedPath}`}</div>
           </>
         )}
         {walletInfo.privateKey && (
           <>
             <br />
-            <strong>{`Private Key: ${walletInfo.privateKey}`}</strong>
+            <div>{`Private Key: ${walletInfo.privateKey}`}</div>
           </>
         )}
         {walletInfo.address && (
           <>
             <br />
-            <strong>{`Address: ${walletInfo.address}`}</strong>
+            <div>{`Address: ${walletInfo.address}`}</div>
           </>
         )}
         {walletInfo.publicKey && (
           <>
             <br />
-            <strong>{`Public Key: ${walletInfo.publicKey}`}</strong>
+            <div>{`Public Key: ${walletInfo.publicKey}`}</div>
           </>
         )}
       </Alert>
