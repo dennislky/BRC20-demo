@@ -1,5 +1,9 @@
 import { makeAutoObservable } from "mobx";
 import {
+  API_KEY,
+  PASSPHRASE,
+  PROJECT_ID,
+  SECRET_KEY,
   TEMP_FROM_ADDRESS,
   TEMP_PRIVATE_KEY,
   TEMP_TO_ADDRESS,
@@ -9,10 +13,10 @@ import {
 export default class AppStore {
   rootStore;
 
-  apiKey = process.env.REACT_APP_API_KEY || "";
-  apiSecretKey = process.env.REACT_APP_SECRET_KEY || "";
-  apiPassphrase = process.env.REACT_APP_PASSPHRASE || "";
-  apiProjectId = process.env.REACT_APP_PROJECT_ID || "";
+  apiKey = API_KEY || "";
+  apiSecretKey = SECRET_KEY || "";
+  apiPassphrase = PASSPHRASE || "";
+  apiProjectId = PROJECT_ID || "";
 
   fromAddress = TEMP_FROM_ADDRESS || "";
   toAddress = TEMP_TO_ADDRESS || "";
@@ -60,10 +64,10 @@ export default class AppStore {
   };
 
   dispose() {
-    this.apiKey = process.env.REACT_APP_API_KEY || "";
-    this.apiSecret = process.env.REACT_APP_SECRET_KEY || "";
-    this.apiPassphrase = process.env.REACT_APP_PASSPHRASE || "";
-    this.apiProjectId = process.env.REACT_APP_PROJECT_ID || "";
+    this.apiKey = API_KEY || "";
+    this.apiSecret = SECRET_KEY || "";
+    this.apiPassphrase = PASSPHRASE || "";
+    this.apiProjectId = PROJECT_ID || "";
 
     this.fromAddress = TEMP_FROM_ADDRESS || "";
     this.toAddress = TEMP_TO_ADDRESS || "";

@@ -44,10 +44,15 @@ export const BRC20_TYPE_DEPLOY = "BRC20_DEPLOY";
 export const BRC20_TYPE_MINT = "BRC20_MINT";
 export const BRC20_TYPE_TRANSFER = "BRC20_TRANSFER";
 
+export const API_KEY = process.env.REACT_APP_API_KEY;
+export const PASSPHRASE = process.env.REACT_APP_PASSPHRASE;
+export const SECRET_KEY = process.env.REACT_APP_SECRET_KEY;
+export const PROJECT_ID = process.env.REACT_APP_PROJECT_ID;
+
 export const TEMP_FROM_ADDRESS = process.env.REACT_APP_TEMP_FROM_ADDRESS;
 export const TEMP_TO_ADDRESS = process.env.REACT_APP_TEMP_TO_ADDRESS;
 export const TEMP_WALLET_ID =  process.env.REACT_APP_TEMP_WALLET_ID;
 export const TEMP_PRIVATE_KEY = process.env.REACT_APP_TEMP_PRIVATE_KEY;
 
-export const FEE_RATE_MODE = 0; // 0: max, 1: normal
+export const FEE_RATE_MODE = 1; // 0: max, 1: normal
 export const IS_SEND_TRANSACTION_BATCH_ENABLED = false; // true: enabled, false: disabled
