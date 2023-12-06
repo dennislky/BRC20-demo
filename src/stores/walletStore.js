@@ -492,7 +492,7 @@ export default class WalletStore {
         commitTxPrevOutputList.push({
           txId: utxo.txHash,
           vOut: utxo.vout,
-          amount: utxo.coinAmount - parseInt(inscriptionOutput, 10),
+          amount: utxo.coinAmount,
           address: fromAddress,
           privateKey,
         });
