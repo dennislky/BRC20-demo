@@ -30,7 +30,7 @@ const MintBRC20Card = () => {
     tickName,
     inscribeAddress,
     mintAmount,
-    mintTxHashList,
+    mintOperations,
   } = walletStore;
   const { fromAddress, walletId: appStoreWalletId } = appStore;
 
@@ -108,31 +108,41 @@ const MintBRC20Card = () => {
             {errorMessage}
           </Alert>
         )}
-        {mintTxHashList && mintTxHashList.length ? (
+        {mintOperations && Object.keys(mintOperations).length ? (
           <Alert severity="success">
             <AlertTitle>Transactions</AlertTitle>
-            {mintTxHashList.map((data, index) => {
-              return (
-                <div key={`data-${index}`}>
-                  <div>{`Operation: ${JSON.stringify(data.op)}`}</div>
-                  {data.txHashList.map((tx, txIndex) => {
-                    return (
-                      <div key={`tx-${txIndex}`}>
-                        <div>{`${tx.itemId} transaction link: `}</div>
-                        <Link
-                          href={`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
-                          target="_blank"
-                          rel="noopener"
-                        >
-                          {`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
-                        </Link>
-                        {txIndex < data.txHashList.length ? <br /> : null}
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
+            <div>{`Sign Info: ${JSON.stringify(mintOperations.signInfo)}`}</div>
+            {mintOperations.utxo && <br />}
+            {mintOperations.utxo && (
+              <div>{`UTXO: ${JSON.stringify(mintOperations.utxo)}`}</div>
+            )}
+            {mintOperations.op && <br />}
+            {mintOperations.op && (
+              <div>{`Operation: ${JSON.stringify(mintOperations.op)}`}</div>
+            )}
+            {mintOperations.inscribedTxs && <br />}
+            {mintOperations.inscribedTxs && (
+              <div>{`Inscribed Transactions: ${JSON.stringify(
+                mintOperations.inscribedTxs
+              )}`}</div>
+            )}
+            <br />
+            {mintOperations.txHashList &&
+              mintOperations.txHashList.map((tx, txIndex) => {
+                return (
+                  <div key={`tx-${txIndex}`}>
+                    <div>{`${tx.itemId} transaction link: `}</div>
+                    <Link
+                      href={`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      {`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                    </Link>
+                    {txIndex < mintOperations.txHashList.length ? <br /> : null}
+                  </div>
+                );
+              })}
           </Alert>
         ) : null}
       </Card>

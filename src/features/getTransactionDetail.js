@@ -104,6 +104,7 @@ const GetTransactionDetailCard = () => {
               <div>{`Time: ${new Date(
                 parseInt(txDetail.txTime, 10)
               ).toISOString()}`}</div>
+              <div>{`API Response: ${JSON.stringify(txDetail)}`}</div>
             </div>
           </Alert>
         ) : null}

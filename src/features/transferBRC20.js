@@ -30,7 +30,7 @@ const TransferBRC20Card = () => {
     tickName,
     inscribeAddress,
     transferAmount,
-    transferTxHashList,
+    transferOperations,
   } = walletStore;
   const { fromAddress, walletId: appStoreWalletId } = appStore;
 
@@ -108,31 +108,44 @@ const TransferBRC20Card = () => {
             {errorMessage}
           </Alert>
         )}
-        {transferTxHashList && transferTxHashList.length ? (
+        {transferOperations && Object.keys(transferOperations).length ? (
           <Alert severity="success">
             <AlertTitle>Transactions</AlertTitle>
-            {transferTxHashList.map((data, index) => {
-              return (
-                <div key={`data-${index}`}>
-                  <div>{`Operation: ${JSON.stringify(data.op)}`}</div>
-                  {data.txHashList.map((tx, txIndex) => {
-                    return (
-                      <div key={`tx-${txIndex}`}>
-                        <div>{`${tx.itemId} transaction link: `}</div>
-                        <Link
-                          href={`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
-                          target="_blank"
-                          rel="noopener"
-                        >
-                          {`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
-                        </Link>
-                        {txIndex < data.txHashList.length ? <br /> : null}
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
+            <div>{`Sign Info: ${JSON.stringify(
+              transferOperations.signInfo
+            )}`}</div>
+            {transferOperations.utxo && <br />}
+            {transferOperations.utxo && (
+              <div>{`UTXO: ${JSON.stringify(transferOperations.utxo)}`}</div>
+            )}
+            {transferOperations.op && <br />}
+            {transferOperations.op && (
+              <div>{`Operation: ${JSON.stringify(transferOperations.op)}`}</div>
+            )}
+            {transferOperations.inscribedTxs && <br />}
+            {transferOperations.inscribedTxs && (
+              <div>{`Inscribed Transactions: ${JSON.stringify(
+                transferOperations.inscribedTxs
+              )}`}</div>
+            )}
+            {transferOperations.txHashList &&
+              transferOperations.txHashList.map((tx, txIndex) => {
+                return (
+                  <div key={`tx-${txIndex}`}>
+                    <div>{`${tx.itemId} transaction link: `}</div>
+                    <Link
+                      href={`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      {`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                    </Link>
+                    {txIndex < transferOperations.txHashList.length ? (
+                      <br />
+                    ) : null}
+                  </div>
+                );
+              })}
           </Alert>
         ) : null}
       </Card>

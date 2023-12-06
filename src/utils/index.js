@@ -28,7 +28,6 @@ export const headerParams = (
   PASSPHRASE = "",
   SECRET_KEY = ""
 ) => {
-  // console.log(timestamp, method, url, body);
   const message =
     method === METHOD_POST
       ? timestamp + method + url + body
@@ -50,4 +49,8 @@ export const headerParams = (
 
 export const generateWalletId = () => {
   return uuidv4();
+};
+
+export const sleep = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };
