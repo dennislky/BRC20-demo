@@ -8,6 +8,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.13",
     "@mui/material": "^5.14.13",
+    "@okxweb3/coin-base": "^1.0.0",
     "@okxweb3/coin-bitcoin": "^1.0.0",
     "@okxweb3/crypto-lib": "^1.0.0",
     "@testing-library/jest-dom": "^5.17.0",

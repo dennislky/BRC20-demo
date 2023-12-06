@@ -110,7 +110,7 @@ export default class WalletStore {
         headers: this.getHeaderParams(date, METHOD_GET, API_GET_ALL_CHAINS),
       });
       const json = await response.json();
-      if (json && json.data && json.data.length) {
+      if (json && json.code === 0) {
         const data = json.data;
         runInAction(() => {
           this.chainsAvailable = data;
@@ -144,7 +144,7 @@ export default class WalletStore {
         headers: this.getHeaderParams(date, METHOD_GET, path),
       });
       const json = await response.json();
-      if (json && json.data && json.data.length) {
+      if (json && json.code === 0) {
         const data = json.data;
         runInAction(() => {
           this.coinsAvailable = data;
@@ -189,7 +189,7 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data && json.data.length) {
+      if (json && json.code === 0) {
         const data = json.data;
         runInAction(() => {
           this.walletId = data[0].walletId;
@@ -232,7 +232,7 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data && json.data.length) {
+      if (json && json.code === 0) {
         const data = json.data;
         return data;
       } else {
@@ -267,7 +267,7 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data && json.data.length) {
+      if (json && json.code === 0) {
         const data = json.data;
         return data;
       } else {
@@ -303,7 +303,7 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data && json.data.length) {
+      if (json && json.code === 0) {
         const data = json.data;
         return data;
       } else {
@@ -364,7 +364,7 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data && json.data.length) {
+      if (json && json.code === 0) {
         const data = json.data;
         console.log("getSignInfo data", data);
         return data;
@@ -416,7 +416,7 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data && json.data.length) {
+      if (json && json.code === 0) {
         const data = json.data;
         console.log("getUTXO data", data);
         return data;
@@ -458,7 +458,7 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data && json.data.length) {
+      if (json && json.code === 0) {
         const data = json.data;
         console.log("getUTXONFT data", data);
         return data;
@@ -660,7 +660,7 @@ export default class WalletStore {
           body: JSON.stringify(body),
         });
         const json = await response.json();
-        if (json && json.data && json.data.length) {
+        if (json && json.code === 0) {
           const data = json.data;
           return data;
         } else {
@@ -716,7 +716,7 @@ export default class WalletStore {
         body: JSON.stringify(body),
       });
       const json = await response.json();
-      if (json && json.data && json.data.length) {
+      if (json && json.code === 0) {
         const data = json.data;
         return data;
       } else {
@@ -916,7 +916,15 @@ export default class WalletStore {
     this.coinTypeMapping = [];
     this.isInit = false;
 
-    this.chainsAvailable = [];
+    this.chainsAvailable = [
+      {
+        name: "BTC",
+        imageUrl: "https://static.coinall.ltd/cdn/wallet/logo/BTC.png",
+        shortName: "btc",
+        coinId: 1,
+        chainId: 0,
+      },
+    ];
     this.coinsAvailable = [];
     this.selectedChain = undefined;
     this.selectedCoin = undefined;
