@@ -47,7 +47,17 @@ export const BRC20_TYPE_TRANSFER = "BRC20_TRANSFER";
 export const OKLINK_ADDRESS_PREFIX = "https://www.oklink.com/btc/address/";
 export const OKLINK_TRANSACTION_PREFIX = "https://www.oklink.com/btc/tx/";
 export const OKLINK_BRC20_LIST_URL = "https://www.oklink.com/btc/token-list";
-export const OKX_BUILD_URL = "https://www.okx.com/web3/build/dev-portal";
+export const OKX_BUILD_URL =
+  "https://www.okx.com/web3/build/docs/devportal/introduction-to-developer-portal-interface";
+
+export const DEPLOY_BRC20_CODE_URL =
+  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L878";
+export const MINT_BRC20_CODE_URL =
+  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L960";
+export const TRANSFER_BRC20_CODE_URL =
+  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L1046";
+export const TRANSFER_BRC20_NFT_CODE_URL =
+  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L1127";
 
 export const API_KEY = process.env.REACT_APP_API_KEY;
 export const PASSPHRASE = process.env.REACT_APP_PASSPHRASE;

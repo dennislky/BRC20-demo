@@ -73,8 +73,23 @@ const CreateWalletCard = () => {
         )}
         {walletId ? (
           <Alert severity="success">
-            <AlertTitle>Success</AlertTitle>
+            <AlertTitle>Wallet Created Successfully</AlertTitle>
             <div>Wallet ID: {walletId}</div>
+            <br />
+            <div>
+              BTC Address Binded: <br />
+              {walletInfos.map((walletInfo, index) => {
+                return (
+                  <div key={`walletInfo-${index}`}>
+                    <div>{`${
+                      walletInfo.segwitType
+                        ? `${walletInfo.segwitType}: `
+                        : "legacy: "
+                    }${walletInfo.address}`}</div>
+                  </div>
+                );
+              })}
+            </div>
           </Alert>
         ) : null}
       </Card>

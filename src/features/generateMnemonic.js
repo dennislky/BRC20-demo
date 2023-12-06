@@ -26,7 +26,6 @@ import { useStore } from "../stores";
 const GenerateMnemonicCard = () => {
   // local UI state
   const [coinType, setCoinType] = useState("BTC");
-  const [network, setNetwork] = useState();
   const [segwitType, setSegwitType] = useState();
   const [mnemonic, setMnemonic] = useState();
   const [errorMessage, setErrorMessage] = useState("");
@@ -40,6 +39,7 @@ const GenerateMnemonicCard = () => {
   // local UI state cleanup when sdk re-initialized
   useEffect(() => {
     setCoinType("BTC");
+    setSegwitType();
     setMnemonic();
     setErrorMessage("");
     setShowDialog(false);
@@ -84,18 +84,19 @@ const GenerateMnemonicCard = () => {
       let wallet = walletStore.getWallet(coinType);
       if (wallet) {
         const derivePathParams = { index: 0 };
-        if (network === "BTC" && segwitType?.enumValue) {
+        if (segwitType?.enumValue) {
           Object.assign(derivePathParams, {
             segwitType: segwitType?.enumValue,
           });
         }
+        console.log(derivePathParams);
         const derivedPath = await wallet.getDerivedPath(derivePathParams);
         const privateKey = await wallet.getDerivedPrivateKey({
           mnemonic,
           hdPath: derivedPath,
         });
         const newAddressParams = { privateKey };
-        if (network === "BTC" && segwitType?.value) {
+        if (segwitType?.value) {
           Object.assign(newAddressParams, {
             addressType:
               segwitType?.value === "segwit_nested_49"
@@ -204,12 +205,9 @@ const GenerateMnemonicCard = () => {
             <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
               <DemoAutocompleteCoinType
                 setCoinType={setCoinType}
-                setNetwork={setNetwork}
                 setSegwitType={setSegwitType}
               />
-              {network && (
-                <DemoAutocompleteSegwit setSegwitType={setSegwitType} />
-              )}
+              <DemoAutocompleteSegwit setSegwitType={setSegwitType} />
               <CardActionButton
                 buttonText="Derive Address"
                 onClick={generatePrivateKey}

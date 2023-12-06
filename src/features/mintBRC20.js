@@ -14,7 +14,7 @@ import {
 
 import { CardActionButton } from "../components/CardActionButton";
 import { useStore } from "../stores";
-import { OKLINK_TRANSACTION_PREFIX } from "../constants";
+import { MINT_BRC20_CODE_URL, OKLINK_TRANSACTION_PREFIX } from "../constants";
 
 // card per feature
 const MintBRC20Card = () => {
@@ -69,6 +69,12 @@ const MintBRC20Card = () => {
       >
         <CardContent sx={{ pb: 1 }}>
           <Typography sx={{ fontSize: 26 }}>Mint BRC20</Typography>
+          <Typography display="inline" sx={{ fontSize: 16 }}>
+            Code Reference:{" "}
+          </Typography>
+          <Link href={MINT_BRC20_CODE_URL} target="_blank" rel="noopener">
+            {MINT_BRC20_CODE_URL}
+          </Link>
         </CardContent>
         <Divider flexItem />
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>

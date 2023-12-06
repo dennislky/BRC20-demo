@@ -82,9 +82,9 @@ export default function Dashboard() {
               <Grid item xs={12}>
                 <TransferBRC20NFTCard />
               </Grid>
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <GetTransactionsCard />
-              </Grid>
+              </Grid> */}
               {/* <Grid item xs={12}>
                 <GetTransactionDetailCard />
               </Grid> */}

@@ -9,10 +9,12 @@ import {
   AlertTitle,
   Divider,
   TextField,
+  Link,
 } from "@mui/material";
 
 import { CardActionButton } from "../components/CardActionButton";
 import { useStore } from "../stores";
+import { TRANSFER_BRC20_NFT_CODE_URL } from "../constants";
 
 // card per feature
 const TransferBRC20NFTCard = () => {
@@ -67,6 +69,16 @@ const TransferBRC20NFTCard = () => {
       >
         <CardContent sx={{ pb: 1 }}>
           <Typography sx={{ fontSize: 26 }}>Transfer BRC20 NFT</Typography>
+          <Typography display="inline" sx={{ fontSize: 16 }}>
+            Code Reference:{" "}
+          </Typography>
+          <Link
+            href={TRANSFER_BRC20_NFT_CODE_URL}
+            target="_blank"
+            rel="noopener"
+          >
+            {TRANSFER_BRC20_NFT_CODE_URL}
+          </Link>
         </CardContent>
         <Divider flexItem />
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>

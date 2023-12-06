@@ -14,7 +14,11 @@ import {
 
 import { CardActionButton } from "../components/CardActionButton";
 import { useStore } from "../stores";
-import { OKLINK_BRC20_LIST_URL, OKLINK_TRANSACTION_PREFIX } from "../constants";
+import {
+  DEPLOY_BRC20_CODE_URL,
+  OKLINK_BRC20_LIST_URL,
+  OKLINK_TRANSACTION_PREFIX,
+} from "../constants";
 
 // card per feature
 const DeployBRC20Card = () => {
@@ -73,6 +77,12 @@ const DeployBRC20Card = () => {
       >
         <CardContent sx={{ pb: 1 }}>
           <Typography sx={{ fontSize: 26 }}>Deploy BRC20</Typography>
+          <Typography display="inline" sx={{ fontSize: 16 }}>
+            Code Reference:{" "}
+          </Typography>
+          <Link href={DEPLOY_BRC20_CODE_URL} target="_blank" rel="noopener">
+            {DEPLOY_BRC20_CODE_URL}
+          </Link>
         </CardContent>
         <Divider flexItem />
         <CardContent sx={{ pb: 1 }}>
