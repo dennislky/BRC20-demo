@@ -851,6 +851,7 @@ export default class WalletStore {
       this.deployOperations.signInfo = {
         address: this.rootStore.appStore.fromAddress || this.inscribeAddress,
         message: "Fetching data from /get-sign-info API",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       const fromAddress =
@@ -872,6 +873,7 @@ export default class WalletStore {
         cost: FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
         txAmount: 1 + 1,
         message: "Fetching data from /get-utxo API",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       let utxo;
@@ -921,6 +923,7 @@ export default class WalletStore {
         max: this.deployAmount.toString(),
         lim: this.deployLimit.toString(),
         message: "Constructing BRC20 deploy operation",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       const op = Object.assign(BRC20_DEPLOY_PARAMS, {
@@ -945,6 +948,7 @@ export default class WalletStore {
         inscriptionOutput: signInfo[0].inscriptionOutput,
         inscriptionBody: JSON.stringify(op),
         message: "Constructing BRC20 transaction",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       const inscribedTxs = await this.constructBRC20Tx(
@@ -971,6 +975,7 @@ export default class WalletStore {
           ? signInfo[0].normalFeeRate
           : signInfo[0].maxFeeRate,
         message: "Broadcasting BRC20 transactions in batch",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       const result = await this.sendTransactionBatch(
@@ -1023,6 +1028,7 @@ export default class WalletStore {
       this.mintOperations.signInfo = {
         address: this.rootStore.appStore.fromAddress || this.inscribeAddress,
         message: "Fetching data from /get-sign-info API",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       const fromAddress =
@@ -1044,6 +1050,7 @@ export default class WalletStore {
         cost: FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
         txAmount: 1 + 1,
         message: "Fetching data from /get-utxo API",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       let utxo;
@@ -1092,6 +1099,7 @@ export default class WalletStore {
         tick: this.tickName,
         amt: this.mintAmount.toString(),
         message: "Constructing BRC20 mint operation",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       const op = Object.assign(BRC20_MINT_PARAMS, {
@@ -1115,6 +1123,7 @@ export default class WalletStore {
         inscriptionOutput: signInfo[0].inscriptionOutput,
         inscriptionBody: JSON.stringify(op),
         message: "Constructing BRC20 transaction",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       const inscribedTxs = await this.constructBRC20Tx(
@@ -1141,6 +1150,7 @@ export default class WalletStore {
           ? signInfo[0].normalFeeRate
           : signInfo[0].maxFeeRate,
         message: "Broadcasting BRC20 transactions in batch",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       const result = await this.sendTransactionBatch(
@@ -1198,6 +1208,7 @@ export default class WalletStore {
       this.transferOperations.signInfo = {
         address: this.rootStore.appStore.fromAddress || this.inscribeAddress,
         message: "Fetching data from /get-sign-info API",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       const fromAddress =
@@ -1219,6 +1230,7 @@ export default class WalletStore {
         cost: FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
         txAmount: 1 + 1,
         message: "Fetching data from /get-utxo API",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       let utxo;
@@ -1267,6 +1279,7 @@ export default class WalletStore {
         tick: this.tickName,
         amt: this.transferAmount.toString(),
         message: "Constructing BRC20 transfer operation",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       const op = Object.assign(BRC20_TRANSFER_PARAMS, {
@@ -1290,6 +1303,7 @@ export default class WalletStore {
         inscriptionOutput: signInfo[0].inscriptionOutput,
         inscriptionBody: JSON.stringify(op),
         message: "Constructing BRC20 transaction",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       const inscribedTxs = await this.constructBRC20Tx(
@@ -1316,6 +1330,7 @@ export default class WalletStore {
           ? signInfo[0].normalFeeRate
           : signInfo[0].maxFeeRate,
         message: "Broadcasting BRC20 transactions in batch",
+        divider: "----------------------------------------",
       };
       await sleep(STEPS_INTERVAL);
       const result = await this.sendTransactionBatch(
