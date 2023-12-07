@@ -32,6 +32,7 @@ import {
   IS_SEND_TRANSACTION_BATCH_ENABLED,
   METHOD_GET,
   METHOD_POST,
+  STEPS_INTERVAL,
   TICK_NAME,
 } from "../constants/index";
 
@@ -68,9 +69,6 @@ export default class WalletStore {
   deployOperations = {};
   mintOperations = {};
   transferOperations = {};
-  // deployTxHashList = [];
-  // mintTxHashList = [];
-  // transferTxHashList = [];
   transferOrderId = undefined;
 
   constructor(rootStore) {
@@ -108,33 +106,6 @@ export default class WalletStore {
       this.rootStore.appStore.apiSecretKey
     );
   };
-
-  // apiCall = async (path, action, method = METHOD_GET, body = undefined, ) => {
-  //   try {
-  //     const date = new Date().toISOString();
-  //     const url = getRequestUrl(path);
-  //     const response = await fetch(url, {
-  //       method,
-  //       headers: this.getHeaderParams(
-  //         date,
-  //         method,
-  //         path,
-  //         JSON.stringify(body)
-  //       ),
-  //       body: JSON.stringify(body),
-  //     });
-  //     const json = await response.json();
-  //     if (json && json.code === 0) {
-  //       const data = json.data;
-  //       runInAction(action);
-  //     } else {
-  //       throw new Error("fetchChainsAvailable failed");
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //     throw err;
-  //   }
-  // }
 
   fetchChainsAvailable = async () => {
     try {
@@ -270,36 +241,36 @@ export default class WalletStore {
         const data = json.data;
         return data;
       } else {
-        if (IS_MOCKING_BRC20_API) {
-          return [
-            {
-              tokenAssets: [
-                {
-                  address:
-                    "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
-                  chainId: "0",
-                  coinId: "1",
-                  symbol: "BTC",
-                  balance: "0.00311441",
-                  coinPrice: "41645.8",
-                },
-              ],
-              brc20TokenAssets: [
-                {
-                  address:
-                    "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
-                  chainId: "0",
-                  coinId: "1115139",
-                  symbol: "tokb",
-                  totalBalance: "10.00000000000000000",
-                  availableBalance: "3.00000000000000000",
-                  transferableBalance: "7.00000000000000000",
-                  coinPrice: "0",
-                },
-              ],
-            },
-          ];
-        }
+        // if (IS_MOCKING_BRC20_API) {
+        //   return [
+        //     {
+        //       tokenAssets: [
+        //         {
+        //           address:
+        //             "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
+        //           chainId: "0",
+        //           coinId: "1",
+        //           symbol: "BTC",
+        //           balance: "0.00311441",
+        //           coinPrice: "41645.8",
+        //         },
+        //       ],
+        //       brc20TokenAssets: [
+        //         {
+        //           address:
+        //             "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
+        //           chainId: "0",
+        //           coinId: "1115139",
+        //           symbol: "tokb",
+        //           totalBalance: "10.00000000000000000",
+        //           availableBalance: "3.00000000000000000",
+        //           transferableBalance: "7.00000000000000000",
+        //           coinPrice: "0",
+        //         },
+        //       ],
+        //     },
+        //   ];
+        // }
         if (json) {
           throw new Error(json.msg);
         }
@@ -335,81 +306,81 @@ export default class WalletStore {
         const data = json.data;
         return data;
       } else {
-        if (IS_MOCKING_BRC20_API) {
-          return [
-            {
-              chainId: "0",
-              orderId: "486750864669831168",
-              txHash:
-                "196b1c9a4a1151af320b874790fda1f83eda43182d3633f20e0b296f8bc7d5d8",
-              fromAddr:
-                "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
-              toAddr:
-                "bc1p9nkcnw8ae9az43uamnaws2e9nvlzm8yjxh48mr3ywvcy7tns6ywqdq77l4",
-              txType: "53",
-              txTime: "1701695331000",
-              txStatus: "4",
-              rowId: "1701695329436264453",
-              assetSummary: [
-                {
-                  coinId: "1115139",
-                  brc20Coin: true,
-                  coinAmount: "1.00000000000000000",
-                  coinAmountNum: "1000000000000000000",
-                  precision: "18",
-                  coinSymbol: "tokb",
-                  coinName: "tokb",
-                  coinLogoUrl:
-                    "https://static.coinall.ltd/cdn/wallet/logo/icon_custom_default_t.png",
-                  direction: 2,
-                },
-              ],
-            },
-            {
-              chainId: "0",
-              orderId: "486740719281782784",
-              txHash:
-                "a1a41ccfe62ba715a085059ee455f164f649b5321ebb361ef6a4d65b24b047a0",
-              fromAddr:
-                "bc1p5vs6u2ff3a6n3qa83xmsxdflqpyg6492nvja4dvpehdf96896e2shx5a0w",
-              toAddr:
-                "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
-              txType: "51",
-              txTime: "1701693009000",
-              txStatus: "4",
-              rowId: "1701693007778930717",
-              assetSummary: [
-                {
-                  coinId: "1115139",
-                  brc20Coin: true,
-                  coinAmount: "0.0",
-                  coinAmountNum: "0",
-                  precision: "18",
-                  coinSymbol: "tokb",
-                  coinName: "tokb",
-                  coinLogoUrl:
-                    "https://static.coinall.ltd/cdn/wallet/logo/icon_custom_default_t.png",
-                  direction: 1,
-                },
-              ],
-            },
-            {
-              chainId: "0",
-              orderId: "485627229238341632",
-              txHash:
-                "64c89978eb7c1b9a197e2d86b49c2d025dc09f70b17bbb76894767e463a7cbec",
-              fromAddr:
-                "bc1p9ewvwpfzuleyq0q8tre3c79hdd9l2v32tg4d9ufvl5dffcjc758qplhdzs",
-              toAddr:
-                "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
-              txType: "60",
-              txTime: "1701427041000",
-              txStatus: "4",
-              rowId: "1701427038981498384",
-              assetSummary: [],
-            },
-          ];
-        }
+        // if (IS_MOCKING_BRC20_API) {
+        //   return [
+        //     {
+        //       chainId: "0",
+        //       orderId: "486750864669831168",
+        //       txHash:
+        //         "196b1c9a4a1151af320b874790fda1f83eda43182d3633f20e0b296f8bc7d5d8",
+        //       fromAddr:
+        //         "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
+        //       toAddr:
+        //         "bc1p9nkcnw8ae9az43uamnaws2e9nvlzm8yjxh48mr3ywvcy7tns6ywqdq77l4",
+        //       txType: "53",
+        //       txTime: "1701695331000",
+        //       txStatus: "4",
+        //       rowId: "1701695329436264453",
+        //       assetSummary: [
+        //         {
+        //           coinId: "1115139",
+        //           brc20Coin: true,
+        //           coinAmount: "1.00000000000000000",
+        //           coinAmountNum: "1000000000000000000",
+        //           precision: "18",
+        //           coinSymbol: "tokb",
+        //           coinName: "tokb",
+        //           coinLogoUrl:
+        //             "https://static.coinall.ltd/cdn/wallet/logo/icon_custom_default_t.png",
+        //           direction: 2,
+        //         },
+        //       ],
+        //     },
+        //     {
+        //       chainId: "0",
+        //       orderId: "486740719281782784",
+        //       txHash:
+        //         "a1a41ccfe62ba715a085059ee455f164f649b5321ebb361ef6a4d65b24b047a0",
+        //       fromAddr:
+        //         "bc1p5vs6u2ff3a6n3qa83xmsxdflqpyg6492nvja4dvpehdf96896e2shx5a0w",
+        //       toAddr:
+        //         "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
+        //       txType: "51",
+        //       txTime: "1701693009000",
+        //       txStatus: "4",
+        //       rowId: "1701693007778930717",
+        //       assetSummary: [
+        //         {
+        //           coinId: "1115139",
+        //           brc20Coin: true,
+        //           coinAmount: "0.0",
+        //           coinAmountNum: "0",
+        //           precision: "18",
+        //           coinSymbol: "tokb",
+        //           coinName: "tokb",
+        //           coinLogoUrl:
+        //             "https://static.coinall.ltd/cdn/wallet/logo/icon_custom_default_t.png",
+        //           direction: 1,
+        //         },
+        //       ],
+        //     },
+        //     {
+        //       chainId: "0",
+        //       orderId: "485627229238341632",
+        //       txHash:
+        //         "64c89978eb7c1b9a197e2d86b49c2d025dc09f70b17bbb76894767e463a7cbec",
+        //       fromAddr:
+        //         "bc1p9ewvwpfzuleyq0q8tre3c79hdd9l2v32tg4d9ufvl5dffcjc758qplhdzs",
+        //       toAddr:
+        //         "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
+        //       txType: "60",
+        //       txTime: "1701427041000",
+        //       txStatus: "4",
+        //       rowId: "1701427038981498384",
+        //       assetSummary: [],
+        //     },
+        //   ];
+        // }
         if (json) {
           throw new Error(json.msg);
         }
@@ -877,37 +848,105 @@ export default class WalletStore {
 
   deployBRC20 = async () => {
     try {
+      this.deployOperations.signInfo = {
+        address: this.rootStore.appStore.fromAddress || this.inscribeAddress,
+        message: "Fetching data from /get-sign-info API",
+      };
+      await sleep(STEPS_INTERVAL);
       const fromAddress =
         this.rootStore.appStore.fromAddress || this.inscribeAddress;
       const signInfo = await this.getSignInfo(fromAddress, fromAddress);
       runInAction(() => {
-        this.deployOperations.signInfo = signInfo;
+        this.deployOperations.signInfo = {
+          ...this.deployOperations.signInfo,
+          ...signInfo[0],
+        };
       });
-      await sleep(500);
+      await sleep(STEPS_INTERVAL);
 
       // txAmount for deploy BRC20 is 1 commit tx + 1 reveal tx
-      const utxo = await this.getUTXO(
-        fromAddress,
-        signInfo[0].inscriptionOutput,
-        signInfo[0].minOutput,
-        FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
-        1 + 1
-      );
+      this.deployOperations.utxo = {
+        address: fromAddress,
+        inscriptionOutput: signInfo[0].inscriptionOutput,
+        minOutput: signInfo[0].minOutput,
+        cost: FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
+        txAmount: 1 + 1,
+        message: "Fetching data from /get-utxo API",
+      };
+      await sleep(STEPS_INTERVAL);
+      let utxo;
+      try {
+        utxo = await this.getUTXO(
+          fromAddress,
+          signInfo[0].inscriptionOutput,
+          signInfo[0].minOutput,
+          FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
+          1 + 1
+        );
+      } catch (err) {
+        console.error(err);
+        runInAction(() => {
+          this.deployOperations.utxo.errorMessage =
+            "Fetching data from /get-utxo API fails, using mock data";
+        });
+        await sleep(STEPS_INTERVAL);
+        utxo = [
+          {
+            address:
+              "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
+            canTransferAmount: "139255",
+            utxoType: 11,
+            utxoList: [
+              {
+                txHash:
+                  "5c710aeac5567439926b80b6e6e4ccc503abb3db6478cb4bb004d53cfc2cd5e0",
+                vout: 1,
+                coinAmount: 63464,
+                status: 1,
+              },
+            ],
+          },
+        ];
+      }
       runInAction(() => {
-        this.deployOperations.utxo = utxo;
+        this.deployOperations.utxo = {
+          ...this.deployOperations.utxo,
+          ...utxo[0],
+        };
       });
-      await sleep(500);
+      await sleep(STEPS_INTERVAL);
 
+      this.deployOperations.op = {
+        tick: this.tickName,
+        max: this.deployAmount.toString(),
+        lim: this.deployLimit.toString(),
+        message: "Constructing BRC20 deploy operation",
+      };
+      await sleep(STEPS_INTERVAL);
       const op = Object.assign(BRC20_DEPLOY_PARAMS, {
         tick: this.tickName,
         max: this.deployAmount.toString(),
         lim: this.deployLimit.toString(),
       });
       runInAction(() => {
-        this.deployOperations.op = op;
+        this.deployOperations.op = {
+          ...this.deployOperations.op,
+          ...op,
+        };
       });
-      await sleep(500);
+      await sleep(STEPS_INTERVAL);
 
+      this.deployOperations.inscribedTxs = {
+        address: fromAddress,
+        utxoList: utxo[0].utxoList,
+        feeRate: FEE_RATE_MODE
+          ? signInfo[0].normalFeeRate
+          : signInfo[0].maxFeeRate,
+        inscriptionOutput: signInfo[0].inscriptionOutput,
+        inscriptionBody: JSON.stringify(op),
+        message: "Constructing BRC20 transaction",
+      };
+      await sleep(STEPS_INTERVAL);
       const inscribedTxs = await this.constructBRC20Tx(
         fromAddress,
         utxo[0].utxoList,
@@ -916,10 +955,24 @@ export default class WalletStore {
         JSON.stringify(op)
       );
       runInAction(() => {
-        this.deployOperations.inscribedTxs = inscribedTxs;
+        this.deployOperations.inscribedTxs = {
+          ...this.deployOperations.inscribedTxs,
+          ...inscribedTxs,
+        };
       });
-      await sleep(500);
+      await sleep(STEPS_INTERVAL);
 
+      this.deployOperations.txHashList = {
+        fromAddress,
+        toAddress: inscribedTxs.commitAddrs[0],
+        txs: inscribedTxs,
+        txType: BRC20_TYPE_DEPLOY,
+        feeRate: FEE_RATE_MODE
+          ? signInfo[0].normalFeeRate
+          : signInfo[0].maxFeeRate,
+        message: "Broadcasting BRC20 transactions in batch",
+      };
+      await sleep(STEPS_INTERVAL);
       const result = await this.sendTransactionBatch(
         fromAddress,
         inscribedTxs.commitAddrs[0],
@@ -930,22 +983,29 @@ export default class WalletStore {
       console.log("deployBRC20 result", result);
       if (result && result[0].txHashList) {
         runInAction(() => {
-          this.deployOperations.txHashList = result[0].txHashList;
+          this.deployOperations.txHashList = {
+            ...this.deployOperations.txHashList,
+            result: result[0].txHashList,
+          };
         });
       } else {
         if (IS_MOCKING_BRC20_API) {
-          this.deployOperations.txHashList = [
-            {
-              itemId: "commitTx",
-              txHash:
-                "cd09509cc602ea797c5d3218f36b401a6f21202470ea6e2ef98db71d48980e1f",
-            },
-            {
-              itemId: "reveal0",
-              txHash:
-                "64c89978eb7c1b9a197e2d86b49c2d025dc09f70b17bbb76894767e463a7cbec",
-            },
-          ];
+          this.deployOperations.txHashList = {
+            ...this.deployOperations.txHashList,
+            errorMessage: "Returning mock response for /send-transaction-batch",
+            result: [
+              {
+                itemId: "commitTx",
+                txHash:
+                  "cd09509cc602ea797c5d3218f36b401a6f21202470ea6e2ef98db71d48980e1f",
+              },
+              {
+                itemId: "reveal0",
+                txHash:
+                  "64c89978eb7c1b9a197e2d86b49c2d025dc09f70b17bbb76894767e463a7cbec",
+              },
+            ],
+          };
         } else {
           throw new Error("deployBRC20 failed");
         }
@@ -959,36 +1019,103 @@ export default class WalletStore {
 
   mintBRC20 = async () => {
     try {
+      this.mintOperations.signInfo = {
+        address: this.rootStore.appStore.fromAddress || this.inscribeAddress,
+        message: "Fetching data from /get-sign-info API",
+      };
+      await sleep(STEPS_INTERVAL);
       const fromAddress =
         this.rootStore.appStore.fromAddress || this.inscribeAddress;
       const signInfo = await this.getSignInfo(fromAddress, fromAddress);
       runInAction(() => {
-        this.mintOperations.signInfo = signInfo;
+        this.mintOperations.signInfo = {
+          ...this.mintOperations.signInfo,
+          ...signInfo[0],
+        };
       });
-      await sleep(500);
+      await sleep(STEPS_INTERVAL);
 
       // txAmount for mint BRC20 is 1 commit tx + n reveal txs, in this case, n = 1
-      const utxo = await this.getUTXO(
-        fromAddress,
-        signInfo[0].inscriptionOutput,
-        signInfo[0].minOutput,
-        FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
-        1 + 1
-      );
+      this.mintOperations.utxo = {
+        address: fromAddress,
+        inscriptionOutput: signInfo[0].inscriptionOutput,
+        minOutput: signInfo[0].minOutput,
+        cost: FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
+        txAmount: 1 + 1,
+        message: "Fetching data from /get-utxo API",
+      };
+      await sleep(STEPS_INTERVAL);
+      let utxo;
+      try {
+        utxo = await this.getUTXO(
+          fromAddress,
+          signInfo[0].inscriptionOutput,
+          signInfo[0].minOutput,
+          FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
+          1 + 1
+        );
+      } catch (err) {
+        console.error(err);
+        runInAction(() => {
+          this.mintOperations.utxo.errorMessage =
+            "Fetching data from /get-utxo API fails, using mock data";
+        });
+        await sleep(STEPS_INTERVAL);
+        utxo = [
+          {
+            address:
+              "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
+            canTransferAmount: "139255",
+            utxoType: 11,
+            utxoList: [
+              {
+                txHash:
+                  "5c710aeac5567439926b80b6e6e4ccc503abb3db6478cb4bb004d53cfc2cd5e0",
+                vout: 1,
+                coinAmount: 63464,
+                status: 1,
+              },
+            ],
+          },
+        ];
+      }
       runInAction(() => {
-        this.mintOperations.utxo = utxo;
+        this.mintOperations.utxo = {
+          ...this.mintOperations.utxo,
+          ...utxo[0],
+        };
       });
-      await sleep(500);
+      await sleep(STEPS_INTERVAL);
 
+      this.mintOperations.op = {
+        tick: this.tickName,
+        amt: this.mintAmount.toString(),
+        message: "Constructing BRC20 mint operation",
+      };
+      await sleep(STEPS_INTERVAL);
       const op = Object.assign(BRC20_MINT_PARAMS, {
         tick: this.tickName,
         amt: this.mintAmount.toString(),
       });
       runInAction(() => {
-        this.mintOperations.op = op;
+        this.mintOperations.op = {
+          ...this.mintOperations.op,
+          ...op,
+        };
       });
-      await sleep(500);
+      await sleep(STEPS_INTERVAL);
 
+      this.mintOperations.inscribedTxs = {
+        address: fromAddress,
+        utxoList: utxo[0].utxoList,
+        feeRate: FEE_RATE_MODE
+          ? signInfo[0].normalFeeRate
+          : signInfo[0].maxFeeRate,
+        inscriptionOutput: signInfo[0].inscriptionOutput,
+        inscriptionBody: JSON.stringify(op),
+        message: "Constructing BRC20 transaction",
+      };
+      await sleep(STEPS_INTERVAL);
       const inscribedTxs = await this.constructBRC20Tx(
         fromAddress,
         utxo[0].utxoList,
@@ -997,10 +1124,24 @@ export default class WalletStore {
         JSON.stringify(op)
       );
       runInAction(() => {
-        this.mintOperations.inscribedTxs = inscribedTxs;
+        this.mintOperations.inscribedTxs = {
+          ...this.mintOperations.inscribedTxs,
+          ...inscribedTxs,
+        };
       });
-      await sleep(500);
+      await sleep(STEPS_INTERVAL);
 
+      this.mintOperations.txHashList = {
+        fromAddress,
+        toAddress: inscribedTxs.commitAddrs[0],
+        txs: inscribedTxs,
+        txType: BRC20_TYPE_MINT,
+        feeRate: FEE_RATE_MODE
+          ? signInfo[0].normalFeeRate
+          : signInfo[0].maxFeeRate,
+        message: "Broadcasting BRC20 transactions in batch",
+      };
+      await sleep(STEPS_INTERVAL);
       const result = await this.sendTransactionBatch(
         fromAddress,
         inscribedTxs.commitAddrs[0],
@@ -1011,27 +1152,34 @@ export default class WalletStore {
       console.log("mintBRC20 result", result);
       if (result && result[0].txHashList) {
         runInAction(() => {
-          this.mintOperations.txHashList = result[0].txHashList;
+          this.mintOperations.txHashList = {
+            ...this.mintOperations.txHashList,
+            result: result[0].txHashList,
+          };
         });
       } else {
         if (IS_MOCKING_BRC20_API) {
-          this.mintOperations.txHashList = [
-            {
-              itemId: "commitTx",
-              txHash:
-                "e48ddae2a1bbe48eff1c06dc68deddf1685fdef9e0c568ca1af22a80f6a92971",
-            },
-            {
-              itemId: "reveal0",
-              txHash:
-                "945c94dc5f596a198238954e6d898fef359c3f64b199698d0899b6b08ee6cf08",
-            },
-            {
-              itemId: "reveal1",
-              txHash:
-                "350c1be760c92c5d11823a1f04153e0534b20d458284f6544965a2dba2b6c27c",
-            },
-          ];
+          this.mintOperations.txHashList = {
+            ...this.mintOperations.txHashList,
+            errorMessage: "Returning mock response for /send-transaction-batch",
+            result: [
+              {
+                itemId: "commitTx",
+                txHash:
+                  "e48ddae2a1bbe48eff1c06dc68deddf1685fdef9e0c568ca1af22a80f6a92971",
+              },
+              {
+                itemId: "reveal0",
+                txHash:
+                  "945c94dc5f596a198238954e6d898fef359c3f64b199698d0899b6b08ee6cf08",
+              },
+              {
+                itemId: "reveal1",
+                txHash:
+                  "350c1be760c92c5d11823a1f04153e0534b20d458284f6544965a2dba2b6c27c",
+              },
+            ],
+          };
         } else {
           throw new Error("mintBRC20 failed");
         }
@@ -1045,36 +1193,103 @@ export default class WalletStore {
 
   transferBRC20 = async () => {
     try {
+      this.transferOperations.signInfo = {
+        address: this.rootStore.appStore.fromAddress || this.inscribeAddress,
+        message: "Fetching data from /get-sign-info API",
+      };
+      await sleep(STEPS_INTERVAL);
       const fromAddress =
         this.rootStore.appStore.fromAddress || this.inscribeAddress;
       const signInfo = await this.getSignInfo(fromAddress, fromAddress);
       runInAction(() => {
-        this.transferOperations.signInfo = signInfo;
+        this.transferOperations.signInfo = {
+          ...this.transferOperations.signInfo,
+          ...signInfo[0],
+        };
       });
-      await sleep(500);
+      await sleep(STEPS_INTERVAL);
 
       // txAmount for transfer BRC20 is 1 commit tx + n reveal txs, in this case, n = 1
-      let utxo = await this.getUTXO(
-        fromAddress,
-        signInfo[0].inscriptionOutput,
-        signInfo[0].minOutput,
-        FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
-        1 + 1
-      );
+      this.transferOperations.utxo = {
+        address: fromAddress,
+        inscriptionOutput: signInfo[0].inscriptionOutput,
+        minOutput: signInfo[0].minOutput,
+        cost: FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
+        txAmount: 1 + 1,
+        message: "Fetching data from /get-utxo API",
+      };
+      await sleep(STEPS_INTERVAL);
+      let utxo;
+      try {
+        utxo = await this.getUTXO(
+          fromAddress,
+          signInfo[0].inscriptionOutput,
+          signInfo[0].minOutput,
+          FEE_RATE_MODE ? signInfo[0].normalCost : signInfo[0].maxCost,
+          1 + 1
+        );
+      } catch (err) {
+        console.error(err);
+        runInAction(() => {
+          this.transferOperations.utxo.errorMessage =
+            "Fetching data from /get-utxo API fails, using mock data";
+        });
+        await sleep(STEPS_INTERVAL);
+        utxo = [
+          {
+            address:
+              "bc1psnr548clz3f4fz6jmpnw5eqzj2v2musk082wp8fvq5ac3p5ete6qg05u8u",
+            canTransferAmount: "139255",
+            utxoType: 11,
+            utxoList: [
+              {
+                txHash:
+                  "5c710aeac5567439926b80b6e6e4ccc503abb3db6478cb4bb004d53cfc2cd5e0",
+                vout: 1,
+                coinAmount: 63464,
+                status: 1,
+              },
+            ],
+          },
+        ];
+      }
       runInAction(() => {
-        this.transferOperations.utxo = utxo;
+        this.transferOperations.utxo = {
+          ...this.transferOperations.utxo,
+          ...utxo[0],
+        };
       });
-      await sleep(500);
+      await sleep(STEPS_INTERVAL);
 
+      this.transferOperations.op = {
+        tick: this.tickName,
+        amt: this.transferAmount.toString(),
+        message: "Constructing BRC20 transfer operation",
+      };
+      await sleep(STEPS_INTERVAL);
       const op = Object.assign(BRC20_TRANSFER_PARAMS, {
         tick: this.tickName,
         amt: this.transferAmount.toString(),
       });
       runInAction(() => {
-        this.transferOperations.op = op;
+        this.transferOperations.op = {
+          ...this.transferOperations.op,
+          ...op,
+        };
       });
-      await sleep(500);
+      await sleep(STEPS_INTERVAL);
 
+      this.transferOperations.inscribedTxs = {
+        address: fromAddress,
+        utxoList: utxo[0].utxoList,
+        feeRate: FEE_RATE_MODE
+          ? signInfo[0].normalFeeRate
+          : signInfo[0].maxFeeRate,
+        inscriptionOutput: signInfo[0].inscriptionOutput,
+        inscriptionBody: JSON.stringify(op),
+        message: "Constructing BRC20 transaction",
+      };
+      await sleep(STEPS_INTERVAL);
       const inscribedTxs = await this.constructBRC20Tx(
         fromAddress,
         utxo[0].utxoList,
@@ -1083,10 +1298,24 @@ export default class WalletStore {
         JSON.stringify(op)
       );
       runInAction(() => {
-        this.transferOperations.inscribedTxs = inscribedTxs;
+        this.transferOperations.inscribedTxs = {
+          ...this.transferOperations.inscribedTxs,
+          ...inscribedTxs,
+        };
       });
-      await sleep(500);
+      await sleep(STEPS_INTERVAL);
 
+      this.transferOperations.txHashList = {
+        fromAddress,
+        toAddress: inscribedTxs.commitAddrs[0],
+        txs: inscribedTxs,
+        txType: BRC20_TYPE_TRANSFER,
+        feeRate: FEE_RATE_MODE
+          ? signInfo[0].normalFeeRate
+          : signInfo[0].maxFeeRate,
+        message: "Broadcasting BRC20 transactions in batch",
+      };
+      await sleep(STEPS_INTERVAL);
       const result = await this.sendTransactionBatch(
         fromAddress,
         inscribedTxs.commitAddrs[0],
@@ -1094,25 +1323,37 @@ export default class WalletStore {
         BRC20_TYPE_TRANSFER,
         FEE_RATE_MODE ? signInfo[0].normalFeeRate : signInfo[0].maxFeeRate
       );
-      console.log("transferBRC20 inscribe result", result);
+      console.log("transferBRC20 result", result);
       if (result && result[0].txHashList) {
         runInAction(() => {
-          this.transferOperations.transferTxHashList = result[0].txHashList;
+          this.transferOperations.txHashList = {
+            ...this.transferOperations.txHashList,
+            result: result[0].txHashList,
+          };
         });
       } else {
         if (IS_MOCKING_BRC20_API) {
-          this.transferOperations.transferTxHashList = [
-            {
-              itemId: "commitTx",
-              txHash:
-                "5c710aeac5567439926b80b6e6e4ccc503abb3db6478cb4bb004d53cfc2cd5e0",
-            },
-            {
-              itemId: "revealTx0",
-              txHash:
-                "a1a41ccfe62ba715a085059ee455f164f649b5321ebb361ef6a4d65b24b047a0",
-            },
-          ];
+          this.transferOperations.txHashList = {
+            ...this.transferOperations.txHashList,
+            errorMessage: "Returning mock response for /send-transaction-batch",
+            result: [
+              {
+                itemId: "commitTx",
+                txHash:
+                  "e48ddae2a1bbe48eff1c06dc68deddf1685fdef9e0c568ca1af22a80f6a92971",
+              },
+              {
+                itemId: "reveal0",
+                txHash:
+                  "945c94dc5f596a198238954e6d898fef359c3f64b199698d0899b6b08ee6cf08",
+              },
+              {
+                itemId: "reveal1",
+                txHash:
+                  "350c1be760c92c5d11823a1f04153e0534b20d458284f6544965a2dba2b6c27c",
+              },
+            ],
+          };
         } else {
           throw new Error("transferBRC20 failed");
         }
@@ -1211,9 +1452,6 @@ export default class WalletStore {
     this.deployOperations = {};
     this.mintOperations = {};
     this.transferOperations = {};
-    // this.deployTxHashList = [];
-    // this.mintTxHashList = [];
-    // this.transferTxHashList = [];
     this.transferOrderId = undefined;
   }
 }

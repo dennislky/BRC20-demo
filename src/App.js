@@ -17,7 +17,7 @@ const GenerateMnemonicCard = lazy(() => import("./features/generateMnemonic"));
 // const GetAllCoinsCard = lazy(() => import("./features/getAllCoins"));
 const CreateWalletCard = lazy(() => import("./features/createWallet"));
 const GetBalanceCard = lazy(() => import("./features/getBalance"));
-const GetTransactionsCard = lazy(() => import("./features/getTransactions"));
+// const GetTransactionsCard = lazy(() => import("./features/getTransactions"));
 // const GetTransactionDetailCard = lazy(() =>
 //   import("./features/getTransactionDetail")
 // );

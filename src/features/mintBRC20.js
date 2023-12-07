@@ -117,41 +117,90 @@ const MintBRC20Card = () => {
           </Alert>
         )}
         {mintOperations && Object.keys(mintOperations).length ? (
-          <Alert severity="success">
-            <AlertTitle>Transactions</AlertTitle>
-            <div>{`Sign Info: ${JSON.stringify(mintOperations.signInfo)}`}</div>
-            {mintOperations.utxo && <br />}
+          <div>
+            {mintOperations.signInfo && (
+              <Alert severity="success" sx={{ "overflow-wrap": "break-word" }}>
+                <AlertTitle>Get Sign Info</AlertTitle>
+                {Object.entries(mintOperations.signInfo).map((entry, index) => {
+                  return (
+                    <div key={`sign-info-entry-${index}`}>
+                      {`${entry[0]}: ${JSON.stringify(entry[1])}`}
+                    </div>
+                  );
+                })}
+              </Alert>
+            )}
             {mintOperations.utxo && (
-              <div>{`UTXO: ${JSON.stringify(mintOperations.utxo)}`}</div>
+              <Alert severity="success" sx={{ "overflow-wrap": "break-word" }}>
+                <AlertTitle>Get UTXO</AlertTitle>
+                {Object.entries(mintOperations.utxo).map((entry, index) => {
+                  return (
+                    <div key={`utxo-entry-${index}`}>
+                      {`${entry[0]}: ${JSON.stringify(entry[1])}`}
+                    </div>
+                  );
+                })}
+              </Alert>
             )}
-            {mintOperations.op && <br />}
             {mintOperations.op && (
-              <div>{`Operation: ${JSON.stringify(mintOperations.op)}`}</div>
+              <Alert severity="success" sx={{ "overflow-wrap": "break-word" }}>
+                <AlertTitle>Construct Inscribe Operation</AlertTitle>
+                {Object.entries(mintOperations.op).map((entry, index) => {
+                  return (
+                    <div key={`op-entry-${index}`}>
+                      {`${entry[0]}: ${JSON.stringify(entry[1])}`}
+                    </div>
+                  );
+                })}
+              </Alert>
             )}
-            {mintOperations.inscribedTxs && <br />}
             {mintOperations.inscribedTxs && (
-              <div>{`Inscribed Transactions: ${JSON.stringify(
-                mintOperations.inscribedTxs
-              )}`}</div>
+              <Alert severity="success" sx={{ "overflow-wrap": "break-word" }}>
+                <AlertTitle>Construct Transaction</AlertTitle>
+                {Object.entries(mintOperations.inscribedTxs).map(
+                  (entry, index) => {
+                    return (
+                      <div key={`op-entry-${index}`}>
+                        {`${entry[0]}: ${JSON.stringify(entry[1])}`}
+                      </div>
+                    );
+                  }
+                )}
+              </Alert>
             )}
-            <br />
-            {mintOperations.txHashList &&
-              mintOperations.txHashList.map((tx, txIndex) => {
-                return (
-                  <div key={`tx-${txIndex}`}>
-                    <div>{`${tx.itemId} transaction link: `}</div>
-                    <Link
-                      href={`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
-                      target="_blank"
-                      rel="noopener"
-                    >
-                      {`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
-                    </Link>
-                    {txIndex < mintOperations.txHashList.length ? <br /> : null}
-                  </div>
-                );
-              })}
-          </Alert>
+            {mintOperations.txHashList && (
+              <Alert>
+                <AlertTitle>Broadcast Transaction</AlertTitle>
+                {Object.entries(mintOperations.inscribedTxs).map(
+                  (entry, index) => {
+                    return (
+                      <div key={`op-entry-${index}`}>
+                        {`${entry[0]}: ${JSON.stringify(entry[1])}`}
+                      </div>
+                    );
+                  }
+                )}
+                {mintOperations.txHashList.result &&
+                  mintOperations.txHashList.result.map((tx, txIndex) => {
+                    return (
+                      <div key={`tx-${txIndex}`}>
+                        <div>{`${tx.itemId} transaction link: `}</div>
+                        <Link
+                          href={`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          {`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                        </Link>
+                        {txIndex < mintOperations.txHashList.length ? (
+                          <br />
+                        ) : null}
+                      </div>
+                    );
+                  })}
+              </Alert>
+            )}
+          </div>
         ) : null}
       </Card>
     </>

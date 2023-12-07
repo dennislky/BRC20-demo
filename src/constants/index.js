@@ -72,3 +72,4 @@ export const TEMP_PRIVATE_KEY = process.env.REACT_APP_TEMP_PRIVATE_KEY;
 export const FEE_RATE_MODE = 1; // 0: max, 1: normal
 export const IS_SEND_TRANSACTION_BATCH_ENABLED = false; // true: enabled, false: disabled
 export const IS_MOCKING_BRC20_API = true; // true: enabled, false: disabled
+export const STEPS_INTERVAL = 1000; // ms

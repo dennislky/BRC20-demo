@@ -120,44 +120,92 @@ const TransferBRC20Card = () => {
           </Alert>
         )}
         {transferOperations && Object.keys(transferOperations).length ? (
-          <Alert severity="success">
-            <AlertTitle>Transactions</AlertTitle>
-            <div>{`Sign Info: ${JSON.stringify(
-              transferOperations.signInfo
-            )}`}</div>
-            {transferOperations.utxo && <br />}
+          <div>
+            {transferOperations.signInfo && (
+              <Alert severity="success" sx={{ "overflow-wrap": "break-word" }}>
+                <AlertTitle>Get Sign Info</AlertTitle>
+                {Object.entries(transferOperations.signInfo).map(
+                  (entry, index) => {
+                    return (
+                      <div key={`sign-info-entry-${index}`}>
+                        {`${entry[0]}: ${JSON.stringify(entry[1])}`}
+                      </div>
+                    );
+                  }
+                )}
+              </Alert>
+            )}
             {transferOperations.utxo && (
-              <div>{`UTXO: ${JSON.stringify(transferOperations.utxo)}`}</div>
+              <Alert severity="success" sx={{ "overflow-wrap": "break-word" }}>
+                <AlertTitle>Get UTXO</AlertTitle>
+                {Object.entries(transferOperations.utxo).map((entry, index) => {
+                  return (
+                    <div key={`utxo-entry-${index}`}>
+                      {`${entry[0]}: ${JSON.stringify(entry[1])}`}
+                    </div>
+                  );
+                })}
+              </Alert>
             )}
-            {transferOperations.op && <br />}
             {transferOperations.op && (
-              <div>{`Operation: ${JSON.stringify(transferOperations.op)}`}</div>
+              <Alert severity="success" sx={{ "overflow-wrap": "break-word" }}>
+                <AlertTitle>Construct Inscribe Operation</AlertTitle>
+                {Object.entries(transferOperations.op).map((entry, index) => {
+                  return (
+                    <div key={`op-entry-${index}`}>
+                      {`${entry[0]}: ${JSON.stringify(entry[1])}`}
+                    </div>
+                  );
+                })}
+              </Alert>
             )}
-            {transferOperations.inscribedTxs && <br />}
             {transferOperations.inscribedTxs && (
-              <div>{`Inscribed Transactions: ${JSON.stringify(
-                transferOperations.inscribedTxs
-              )}`}</div>
+              <Alert severity="success" sx={{ "overflow-wrap": "break-word" }}>
+                <AlertTitle>Construct Transaction</AlertTitle>
+                {Object.entries(transferOperations.inscribedTxs).map(
+                  (entry, index) => {
+                    return (
+                      <div key={`op-entry-${index}`}>
+                        {`${entry[0]}: ${JSON.stringify(entry[1])}`}
+                      </div>
+                    );
+                  }
+                )}
+              </Alert>
             )}
-            {transferOperations.txHashList &&
-              transferOperations.txHashList.map((tx, txIndex) => {
-                return (
-                  <div key={`tx-${txIndex}`}>
-                    <div>{`${tx.itemId} transaction link: `}</div>
-                    <Link
-                      href={`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
-                      target="_blank"
-                      rel="noopener"
-                    >
-                      {`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
-                    </Link>
-                    {txIndex < transferOperations.txHashList.length ? (
-                      <br />
-                    ) : null}
-                  </div>
-                );
-              })}
-          </Alert>
+            {transferOperations.txHashList && (
+              <Alert>
+                <AlertTitle>Broadcast Transaction</AlertTitle>
+                {Object.entries(transferOperations.inscribedTxs).map(
+                  (entry, index) => {
+                    return (
+                      <div key={`op-entry-${index}`}>
+                        {`${entry[0]}: ${JSON.stringify(entry[1])}`}
+                      </div>
+                    );
+                  }
+                )}
+                {transferOperations.txHashList.result &&
+                  transferOperations.txHashList.result.map((tx, txIndex) => {
+                    return (
+                      <div key={`tx-${txIndex}`}>
+                        <div>{`${tx.itemId} transaction link: `}</div>
+                        <Link
+                          href={`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          {`${OKLINK_TRANSACTION_PREFIX}${tx.txHash}`}
+                        </Link>
+                        {txIndex < transferOperations.txHashList.length ? (
+                          <br />
+                        ) : null}
+                      </div>
+                    );
+                  })}
+              </Alert>
+            )}
+          </div>
         ) : null}
       </Card>
     </>

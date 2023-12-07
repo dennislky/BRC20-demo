@@ -30,7 +30,6 @@ const InitSDKCard = () => {
     apiPassphrase,
     apiSecretKey,
     fromAddress,
-    // toAddress,
     walletId,
     privateKey,
   } = appStore;
@@ -67,9 +66,6 @@ const InitSDKCard = () => {
   const setupFromAddress = (event) => {
     appStore.setFromAddress(event.target.value);
   };
-  // const setupToAddress = (event) => {
-  //   appStore.setToAddress(event.target.value);
-  // };
   const setupWalletId = (event) => {
     appStore.setWalletId(event.target.value);
   };
@@ -153,12 +149,6 @@ const InitSDKCard = () => {
             onChange={setupFromAddress}
             value={fromAddress}
           />
-          {/* <TextField
-            label="To Address"
-            sx={{ pr: 1 }}
-            onChange={setupToAddress}
-            value={toAddress}
-          /> */}
           <TextField
             label="Private Key"
             sx={{ pr: 1 }}
@@ -177,24 +167,10 @@ const InitSDKCard = () => {
               target="_blank"
               rel="noopener"
             >
-              {`${OKLINK_ADDRESS_PREFIX}/${fromAddress}/inscription`}
+              {`${OKLINK_ADDRESS_PREFIX}${fromAddress}/inscription`}
             </Link>
           </CardActions>
         ) : null}
-        {/* {toAddress ? (
-          <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
-            <Typography display="inline" sx={{ fontSize: 16 }}>
-              To Address Inscription Link:{" "}
-            </Typography>
-            <Link
-              href={`${OKLINK_ADDRESS_PREFIX}/${toAddress}/inscription`}
-              target="_blank"
-              rel="noopener"
-            >
-              {`${OKLINK_ADDRESS_PREFIX}/${toAddress}/inscription`}
-            </Link>
-          </CardActions>
-        ) : null} */}
         <CardActions sx={{ pl: 2, pr: 2, pb: 2 }}>
           {!isInit ? (
             <CardActionButton
