@@ -51,13 +51,13 @@ export const OKX_BUILD_URL =
   "https://www.okx.com/web3/build/docs/devportal/introduction-to-developer-portal-interface";
 
 export const DEPLOY_BRC20_CODE_URL =
-  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L878";
+  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L849";
 export const MINT_BRC20_CODE_URL =
-  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L960";
+  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L1020";
 export const TRANSFER_BRC20_CODE_URL =
-  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L1046";
+  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L1194";
 export const TRANSFER_BRC20_NFT_CODE_URL =
-  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L1127";
+  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L1368";
 
 export const API_KEY = process.env.REACT_APP_API_KEY;
 export const PASSPHRASE = process.env.REACT_APP_PASSPHRASE;
