@@ -8,6 +8,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import DemoSnackBar from "./components/DemoSnackBar";
 
+const DescriptionCard = lazy(() => import("./features/description"));
 const InitSDKCard = lazy(() => import("./features/initSDK"));
 // const GeneratePrivateKeyCard = lazy(() =>
 //   import("./features/generatePrivateKey")
@@ -49,6 +50,9 @@ export default function Dashboard() {
               OKX WaaS BRC20 Demo
             </Typography>
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <DescriptionCard />
+              </Grid>
               <Grid item xs={12}>
                 <InitSDKCard />
               </Grid>
