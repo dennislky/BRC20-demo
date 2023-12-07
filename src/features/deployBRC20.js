@@ -196,7 +196,7 @@ const DeployBRC20Card = () => {
             {deployOperations.txHashList && (
               <Alert>
                 <AlertTitle>Broadcast Transaction</AlertTitle>
-                {Object.entries(deployOperations.inscribedTxs).map(
+                {Object.entries(deployOperations.txHashList).map(
                   (entry, index) => {
                     return (
                       <div key={`op-entry-${index}`}>

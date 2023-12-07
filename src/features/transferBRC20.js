@@ -176,7 +176,7 @@ const TransferBRC20Card = () => {
             {transferOperations.txHashList && (
               <Alert>
                 <AlertTitle>Broadcast Transaction</AlertTitle>
-                {Object.entries(transferOperations.inscribedTxs).map(
+                {Object.entries(transferOperations.txHashList).map(
                   (entry, index) => {
                     return (
                       <div key={`op-entry-${index}`}>

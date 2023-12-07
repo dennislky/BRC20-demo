@@ -171,7 +171,7 @@ const MintBRC20Card = () => {
             {mintOperations.txHashList && (
               <Alert>
                 <AlertTitle>Broadcast Transaction</AlertTitle>
-                {Object.entries(mintOperations.inscribedTxs).map(
+                {Object.entries(mintOperations.txHashList).map(
                   (entry, index) => {
                     return (
                       <div key={`op-entry-${index}`}>

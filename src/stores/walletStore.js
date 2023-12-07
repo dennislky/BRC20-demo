@@ -886,7 +886,7 @@ export default class WalletStore {
       } catch (err) {
         console.error(err);
         runInAction(() => {
-          this.deployOperations.utxo.errorMessage =
+          this.deployOperations.utxo.mockAlert =
             "Fetching data from /get-utxo API fails, using mock data";
         });
         await sleep(STEPS_INTERVAL);
@@ -992,7 +992,8 @@ export default class WalletStore {
         if (IS_MOCKING_BRC20_API) {
           this.deployOperations.txHashList = {
             ...this.deployOperations.txHashList,
-            errorMessage: "Returning mock response for /send-transaction-batch",
+            mockAlert:
+              "IS_MOCKING_BRC20_API enabled, returning mock response for /send-transaction-batch",
             result: [
               {
                 itemId: "commitTx",
@@ -1057,7 +1058,7 @@ export default class WalletStore {
       } catch (err) {
         console.error(err);
         runInAction(() => {
-          this.mintOperations.utxo.errorMessage =
+          this.mintOperations.utxo.mockAlert =
             "Fetching data from /get-utxo API fails, using mock data";
         });
         await sleep(STEPS_INTERVAL);
@@ -1161,7 +1162,8 @@ export default class WalletStore {
         if (IS_MOCKING_BRC20_API) {
           this.mintOperations.txHashList = {
             ...this.mintOperations.txHashList,
-            errorMessage: "Returning mock response for /send-transaction-batch",
+            mockAlert:
+              "IS_MOCKING_BRC20_API enabled, returning mock response for /send-transaction-batch",
             result: [
               {
                 itemId: "commitTx",
@@ -1231,7 +1233,7 @@ export default class WalletStore {
       } catch (err) {
         console.error(err);
         runInAction(() => {
-          this.transferOperations.utxo.errorMessage =
+          this.transferOperations.utxo.mockAlert =
             "Fetching data from /get-utxo API fails, using mock data";
         });
         await sleep(STEPS_INTERVAL);
@@ -1335,7 +1337,8 @@ export default class WalletStore {
         if (IS_MOCKING_BRC20_API) {
           this.transferOperations.txHashList = {
             ...this.transferOperations.txHashList,
-            errorMessage: "Returning mock response for /send-transaction-batch",
+            mockAlert:
+              "IS_MOCKING_BRC20_API enabled, returning mock response for /send-transaction-batch",
             result: [
               {
                 itemId: "commitTx",
