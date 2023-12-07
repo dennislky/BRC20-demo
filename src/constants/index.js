@@ -57,7 +57,7 @@ export const MINT_BRC20_CODE_URL =
 export const TRANSFER_BRC20_CODE_URL =
   "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L1194";
 export const TRANSFER_BRC20_NFT_CODE_URL =
-  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L1368";
+  "https://github.com/dennislky/BRC20-demo/blob/98b66cb2a5bc25e38c17ef4bc3fc32c66f153124/src/stores/walletStore.js#L1363";
 
 export const API_KEY = process.env.REACT_APP_API_KEY;
 export const PASSPHRASE = process.env.REACT_APP_PASSPHRASE;

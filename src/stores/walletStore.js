@@ -1340,17 +1340,12 @@ export default class WalletStore {
               {
                 itemId: "commitTx",
                 txHash:
-                  "e48ddae2a1bbe48eff1c06dc68deddf1685fdef9e0c568ca1af22a80f6a92971",
+                  "5c710aeac5567439926b80b6e6e4ccc503abb3db6478cb4bb004d53cfc2cd5e0",
               },
               {
-                itemId: "reveal0",
+                itemId: "revealTx0",
                 txHash:
-                  "945c94dc5f596a198238954e6d898fef359c3f64b199698d0899b6b08ee6cf08",
-              },
-              {
-                itemId: "reveal1",
-                txHash:
-                  "350c1be760c92c5d11823a1f04153e0534b20d458284f6544965a2dba2b6c27c",
+                  "a1a41ccfe62ba715a085059ee455f164f649b5321ebb361ef6a4d65b24b047a0",
               },
             ],
           };
